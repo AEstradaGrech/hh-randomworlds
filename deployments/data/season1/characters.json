@@ -1,0 +1,74 @@
+[
+    {
+        "name": "Kaelin 'Blackjack' Vex",
+        "age": "Unknown. Looks like mid-twenties.",
+        "appereance": "Vex wears a black leather jacket adorned with silver studs and spikes. A pale inexpressive face paralyzed in an uneasing dead-like expression. A pair of mirrored shades perched on the bridge of his nose give him a menacing air.",
+        "background": "Vex grew up as part of a notorious street gang known for their brutal tactics in Neo-Tokyo's underbelly. He quickly rose through ranks, earning himself the nickname 'Blackjack' due to an uncanny ability with cards and knives alike",
+        "personality": "People often describe Vex as cold-blooded or even psychopathic but he sees it more like a calculated efficiency.",
+        "motivations": "Vex's primary goal is survival in this unforgiving world. He has no qualms about taking what isn't his, especially if that means getting ahead of the competition",
+        "iconicMoment": "With an air of nonchalance Vex steps out into Neo-Tokyo night driving a sleek black Pontiac GTO with its engine roaring like beast awakened from deep slumber. The neon lights reflect off polished chrome as he speeds through crowded streets, weaving past pedestrians and other vehicles.",
+        "comment": "'Luck is for the weak.'",
+        "ambiences": ["Sci-fi", "Cyberpunk"],
+        "moods": ["Distopic", "Street gangster"]
+    },
+    {
+        "name": "Augustus 'Augie' Eastwood",
+        "age": "27",
+        "appereance": " Augie is unshaven and his hair is messy he has a scar on one side of the right eye. He wears an unsettling Corporative States of Can-America uniform with patches that indicate him as part of the elite combat pilots, along with the combat Radio-headset perched atop his head. He covers his face with the CAN-AM Korpokaze mask and is ready to sacrifice himself for the CEO-Emperor of the Corporative States of Can-America,",
+        "background": "Augie grew up in this dystopian world where WWII never really stoped and he was trained to be a pilot from young age. He has been fighting for years now but after loosing many friends on one mission Augie started questioning the war effort, is it worth all these lives?",
+        "personality": "People call him crazy because of his reckless flying style ,but in reality Augustus 'Augie' Eastwood knows exactly what he's doing. He has a strong sense of justice and will do whatever it takes to protect those who can't defend themselves.",
+        "motivations": "Augustus wants the war effort to end, but at this point that seems like an impossible task .He is driven by his desire for peace ,but also feels responsible for all lives lost during these years. He hopes one day he will be able to fly without seeing death and destruction on every mission.",
+        "iconicMoment": "With a fierce determination in his eyes, Augie banks hard left as the enemy fire rips through the air around him .His plane shakes violently but holds together long enough for him to take out two of their planes. As he levels off ,he lets out a triumphant yell and gives himself over to adrenaline-fueled euphoria.",
+        "comment": "People say that Augie is crazy, they call it 'Eastwood's Luck' when pilots survive impossible situations.",
+        "ambiences": ["Sci-fi", "Historical fiction"],
+        "moods": ["Distopic", "Post-apocalyptic", "Retrofuturistic", "Steampunk"]
+      },
+      {
+        "name": "Kazimir Koldun",
+        "age": "50 ",
+        "appereance": "A tall, lanky figure draped in animal hides and feathers clad with a fur-lined hood. Kazimir's face is painted white except for his eyes which are black as coal.",
+        "background": "Born into the tribe of the Koldunovs, Kazimir has been trained from birth to harness dark magic within himself. He believes that he can communicate directly with spirits and channel their power through rituals performed under a full moon",
+        "personality": "Kazimir is an enigmatic figure who speaks little but when he does it's in riddles or cryptic prophecies.",
+        "motivations": "To master the dark arts of shamanism, to become one with nature and bend its power for his own will. He seeks a way to transcend mortality through ancient rituals",
+        "iconicMoment": "Kazimir stands atop an icy mountain peak at midnight under full moonlight as he performs a ritual dance around a blazing fire.",
+        "comment": "'The spirits whisper secrets in my ear, and I am the vessel for their wrath.'",
+        "ambiences": ["Fantasy", "Medieval"],
+        "moods": ["Black Magic", "Superstition", "Epic Saga"]
+      },
+      {
+        "name": "Dark Animist",
+        "age": "UNKNOWN",
+        "appereance": "The Dark Animist wears a mix of fur-lined and leather furs with bones, antlers or animal hides attached to them. Their face is painted with tribal patterns representing the spirits they communicate with.",
+        "background": "In this world where magic has been outlawed by the Church, those who practice it are forced to live on the fringes of society. The Dark Animist lives deep into a forest and communicates only through whispers carried away from their village.",
+        "personality": "The animists believe that all living things have spirits within them which can be communicated with if you know how.",
+        "motivations": "Their primary goal is to maintain the balance between nature's forces, keeping evil at bay. They are driven by a desire for harmony and peace in their world.",
+        "iconicMoment": "The Dark Animist stands atop an ancient tree stump surrounded by candles made from animal fat that cast flickering shadows on nearby trees.",
+        "comment": "Those who seek to understand the balance of nature must first learn its language.",
+        "ambiences": ["Fantasy", "Medieval", "Celtic Folklore"],
+        "moods": ["Black Magic", "Superstition", "Epic Saga"]
+      },
+      {
+        "name": "Malicia Folcott",
+        "age": "Around mid-40s",
+        "appereance": "She has long, dark braided hair that reaches down to her waist. Malancia attire consists of a simple yet tattered black cloak with intricate embroidery depicting various symbols and sigils associated with the occult.",
+        "background": "Malacia was once part of an influential cult in Salem town during its most tumultuous period -1692- where she served as one among many devoted followers to their dark deity. However, after being accused by her former brethren for practicing forbidden magic that threatened their power structure and subsequently betrayed Malancia's trust.",
+        "personality": "Malacia is a vengeful soul consumed entirely by hatred towards those who wronged her in the past. She has no qualms about using any means necessary to exact revenge, including resorting to dark arts she once swore never to practice again",
+        "motivations": "Her primary goal remains seeking vengeance against all members of that cult and anyone else involved with their brutal trials.",
+        "iconicMoment": "Malancia stands atop a hill overlooking the ruins of Salem town. The wind carries whispers from her former brethren, taunting her about past betrayals as she raises an ancient tome to cast a dark spell in response",
+        "comment": "'The darkness that consumed me will now consume you.'",
+        "ambiences": ["Fantasy", "XVII century", "Salem Trials"],
+        "moods": ["Black Magic","Dark"]
+      },
+      {
+        "name": "Abigail Williams",
+        "age": "Unknown. Appears youthful due to dark magic",
+        "appereance": "Dark skin sunken eyes deep-set in her pale Face witch's cloak with a Blood-red hood. Astrid wears tattered black robes that seem sewn together from various scraps of dark cloth and leather straps holding them up over the shoulders. Her long silver hair is tied back into two braids, adorned with small bones and feathers.",
+        "background": "Abigail was once part of an ancient cult in Salem village who practiced a forbidden form of magic that drew power from darkness itself. When their practices were discovered by the townsfolk they faced persecution at first but soon turned to violence against them as well. Abigail's family members, friends and fellow practitioners all fell victim to this brutal witch hunt.",
+        "personality": "Abigail is a cold calculating individual with no qualms about using her dark magic for revenge on those who wronged her in the past. She has an unsettling aura of calmness that unnerves even other witches she encounters, as if nothing can ever truly ruffle her feathers or make her lose control.",
+        "motivations": "Abigail's primary goal is to exact a terrible vengeance upon Salem village for their brutal treatment towards herself and others like her. She seeks out those responsible for the trials of '92 with an unyielding determination, using every trick in the book - including black magic spells that make even other witches tremble.",
+        "iconicMoment": "Abigail stands atop a ruined gallows at midnight under a blood moon casting long shadows across her dark form. She raises one hand towards the sky and whispers incantations as tiny sparks of malevolent energy dance around her fingers, illuminating an eerie glow on nearby trees that seem to writhe in agony.",
+        "comment": "'The darkness will consume them all.'",
+        "ambiences": ["Fantasy", "XVII century", "Salem Trials"],
+        "moods": ["Black Magic", "Superstition", "Gothic", "Horror"]
+      }
+]

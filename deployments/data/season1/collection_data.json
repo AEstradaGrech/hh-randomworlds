@@ -1,0 +1,58 @@
+[
+    {
+        "name" : "RandomWorlds-Season1",
+        "description": "A collection of NFT characters to play Random Quests in the Random Worlds app",
+        "imgName": "RandomWorlds-Season1_logo.png",
+        "rarity" : "None",
+        "maxMints": 50,
+        "price": 0.0003 
+    },
+    {
+        "name" : "Kaelin 'Blackjack' Vex",
+        "description": "A collection of NFT characters to play Random Quests in the Random Worlds app",
+        "imgName": "Kaelin_Blackjack_Vex_Common.png",
+        "rarity" : "Common",
+        "maxMints": 14,
+        "price": 0.0003 
+    },
+    {
+        "name" : "Augustus 'Augie' Eastwood",
+        "description": "A collection of NFT characters to play Random Quests in the Random Worlds app",
+        "imgName": "Augustus_Augie_Eastwood.png",
+        "rarity" : "Common",
+        "maxMints": 15,
+        "price": 0.0005 
+    },
+    {
+        "name" : "Kazimir Koldun",
+        "description": "A collection of NFT characters to play Random Quests in the Random Worlds app",
+        "imgName": "Kazimir_Koldun.png",
+        "rarity" : "Rare",
+        "maxMints": 10,
+        "price": 0.0007 
+    },
+    {
+        "name" : "Dark Animist",
+        "description": "A collection of NFT characters to play Random Quests in the Random Worlds app",
+        "imgName": "Dark_Animist.png",
+        "rarity" : "Exotic",
+        "maxMints": 5,
+        "price": 0.0009 
+    },
+    {
+        "name" : "Malicia Folcott",
+        "description": "A collection of NFT characters to play Random Quests in the Random Worlds app",
+        "imgName": "Malicia_Folcott.png",
+        "rarity" : "Rare",
+        "maxMints": 5,
+        "price": 0.0004 
+    },
+    {
+        "name" : "Abigail Williams",
+        "description": "A collection of NFT characters to play Random Quests in the Random Worlds app",
+        "imgName": "Abigail_Williams.png",
+        "rarity" : "Unique",
+        "maxMints": 1,
+        "price": 0.0012 
+    }
+]
