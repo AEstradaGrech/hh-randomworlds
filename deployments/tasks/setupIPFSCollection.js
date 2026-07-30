@@ -7,12 +7,15 @@ const path = require('path')
 const axios = require('axios');
 const CryptoJS = require("crypto-js");
 
-//npx hardhat upload-randomworlds-collection --contracttype ImmutableCollection --deploymentname RandomWorlds-Season_1 --deploymentversion 0.0.1
+//npx hardhat upload-randomworlds-collection --contracttype ImmutableCollection --deploymentname RandomWorlds-Season_1 --deploymentversion 0.0.1 --metaoverride false
 task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection models and metadata to IPFS via Pinata and saves the returned CIDs in the deployment summary file')
 .addParam('contracttype')
 .addParam('deploymentname')
 .addParam('deploymentversion')
+.addParam('metaoverride')
 .setAction(async (taskArgs, args) => {
+  let isMetaOverride = taskArgs["metaoverride"] === 'true' ? true : false;
+  console.log('-- is meta override --', isMetaOverride);
   let summary = {
     contractType : taskArgs['contracttype'],
     version: taskArgs["deploymentversion"],
@@ -95,10 +98,28 @@ task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection mode
         failedUploads: failedUploads
     }
   }
-  
   console.log('summary after model upload: ', summary);
-
-  if(summary.modelsData.folderCid !== undefined){
+  let isDuplicate = response.data.isDuplicate;
+  console.log('is dup', isDuplicate);
+  if(isDuplicate === true)
+    console.log('is dup bool');
+  if(isMetaOverride === true)
+    console.log('is  override');
+  let skipMetaUpload = false;
+  if(isDuplicate === true && isMetaOverride === false){
+    let ipfsDeploymentData = require(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`));
+    if(ipfsDeploymentData){
+      console.log('-- REUSING DEPLOYED COLLECTION METADATA -- ', ipfsDeploymentData.modelsMetadata.folderCid);
+      summary = {
+        ...summary,
+        modelsMetadata: {...ipfsDeploymentData.modelsMetadata}
+      }
+      console.log('reused summary', summary);
+      skipMetaUpload = true;
+      console.log(`-- USING META CID: ${summary.modelsMetadata.folderCid} --`);
+    }
+  }
+  if(!skipMetaUpload && summary.modelsData.folderCid !== undefined){
     console.log('beginning metadata upload process')
     let data = new FormData();
     let metaData = [];
@@ -140,15 +161,9 @@ task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection mode
           metadata: metaData
       }
     }
-    fs.outputJSONSync(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`), summary);
   }
+  fs.outputJSONSync(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`), summary);
 })
-
-task('generate-deployment-metadata', 'Generates the metadata json files to be manually uploaded to the IPFS')
-  .addParam('deploymentname') //split '-' --> RandomWorlds-Season1 <- col metadata en json
-  .setAction(async (taskArgs) =>{
-    generateDeploymentMetadata(taskArgs['deploymentname']);
-  })
 
 async function streamToBuffer(stream) {
   return new Promise((resolve, reject) => {
@@ -267,10 +282,7 @@ function populateCharNFTMetadata(name, description, CID, fileName, rarity, profi
   let encrypted_profile = '';
   let attributtes = [];
   if(profile){
-    console.log(`-- encrypting char profile for ${name} --\n`, profile);
     encrypted_profile = cryptoJsEncrypt(JSON.stringify(profile));
-    decrypt_test = cryptoJsDecrypt(encrypted_profile);
-    console.log(`-- decrypting test --\n`, decrypt_test);
     attributtes.push(getOpenSeaTrait('Rarity', rarity, 'boost_percentage', 4))
     attributtes.push(getOpenSeaTrait('Generation', 1, 'number', 5)) //TODO: for breeding purposes (merge characters into new one merging ambiences and moods)
     //TODO: v2: Health - Recovery rate & stakeToRecover
@@ -303,52 +315,3 @@ function populateCharNFTMetadata(name, description, CID, fileName, rarity, profi
   };
 }
 
-function generateDeploymentMetadata(deployment){
-  let split = deployment.split('-');
-  if(split.length !== 2){
-    console.log('ERROR :: generate deployment metadata -- invalid deployment name');
-    return;
-  }
-  const colDirPath = path.join(__dirname, 'nft-images', split[0], split[1]);
-  let ipfsData = require(path.join(colDirPath, 'ipfs_cids.json'));
-  if(!ipfsData || !ipfsData[0]){
-    console.log('no IPFS CIDS file found. Cancelling process');
-    return;
-  }
-  let modelsCid = ipfsData[0].modelsCid;
-  if(!modelsCid){
-    console.log('no models CID found in IPFS data file. Upload the Models folder to the IPFS and add the resulting CID to the IPFS data file');
-    return;
-  }
-  console.log(`-- generating metadata files for folder: ${modelsCid} --`)
-  let collectionData  = require(path.join(colDirPath,`collection_data.json`));
-  if(!collectionData){
-      console.log(`no metadata file found for collection ${deployment}. Cancelling process...`);
-      return;
-  }
-  let charactersData  = require(path.join(colDirPath,`characters.json`));
-  if(!charactersData){
-    console.log(`no character profiles have been found for collection ${deployment}. Cancelling process...`);
-    return;
-  }
-  let results = []
-  collectionData.forEach(file => {
-    console.log(`-- reading char profile for: ${file.name} --`)
-    let metadata = '';
-    let fileNameSplit = file.imgName.split('.');
-    if(!fileNameSplit[0].includes("_logo")){
-      let charProfile = charactersData.find(x => x.name === file.name);
-      if(charProfile){
-        metadata = populateCharNFTMetadata(file.name, charProfile.comment, modelsCid, file.imgName, file.rarity, charProfile);
-        results.push({fileName: fileNameSplit[0], metadata: metadata});
-      }
-    }
-    else {
-      metadata = populateCharNFTMetadata(file.name, file.description, modelsCid, file.imgName, file.rarity, "");
-      results.push({fileName: fileNameSplit[0].replace('_logo',''), metadata:metadata});
-    }
-  })  
-  results.forEach(metadataFile => {
-    fs.outputJSONSync(path.join(colDirPath,'metadata', `${metadataFile.fileName}.json`), metadataFile.metadata); 
-  })
-}

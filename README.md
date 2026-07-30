@@ -3,7 +3,7 @@ Hardhat project to handle IPFS data &amp; deploy smart contracts for RandomWorld
 
 # tasks:
 
-npx hardhat upload-randomworlds-collection --contracttype ImmutableCollection --deploymentname RandomWorlds-Season_1 --deploymentversion 0.0.1
+npx hardhat upload-randomworlds-collection --contracttype ImmutableCollection --deploymentname RandomWorlds-Season_1 --deploymentversion 0.0.1 --metaoverride false
 
 npx hardhat --network localhost deploy-immutable-set --deploymentname RandomWorlds --contractversion 0.0.1
 
