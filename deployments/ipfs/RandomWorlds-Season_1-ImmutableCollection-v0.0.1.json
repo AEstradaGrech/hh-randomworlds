@@ -1,0 +1,289 @@
+{
+	"contractType": "ImmutableCollection",
+	"version": "0.0.1",
+	"deployment": "RandomWorlds-Season_1",
+	"collectionName": "RandomWorlds - Season 1",
+	"collectionDescription": "A collection of NFT characters to play Random Quests in the Random Worlds app",
+	"modelsData": {
+		"folderCid": "QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU",
+		"filesNumber": 7,
+		"timestamp": "2026-04-05T18:52:14.555Z",
+		"isOriginalCopy": false,
+		"mimeType": "directory",
+		"models": [
+			"Abigail_Williams.png",
+			"Augustus_Augie_Eastwood.png",
+			"Dark_Animist.png",
+			"Kaelin_Blackjack_Vex_Common.png",
+			"Kazimir_Koldun.png",
+			"Malicia_Folcott.png",
+			"RandomWorlds-Season1_logo.png"
+		],
+		"failedUploads": [
+
+		]
+	},
+	"modelsMetadata": {
+		"folderCid": "QmfHQZXogTbhJUakovP28GrpwVs6F1CXwNeptEvzWQvvAw",
+		"metadata": [
+			{
+				"name": "Kaelin 'Blackjack' Vex",
+				"description": "'Luck is for the weak.'",
+				"image": "ipfs://QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Kaelin_Blackjack_Vex_Common.png",
+				"external_url": "https://ipfs.io/ipfs/QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Kaelin_Blackjack_Vex_Common.png",
+				"attributtes": [
+					{
+						"display_type": "boost_percentage",
+						"trait_type": "Rarity",
+						"value": "Common",
+						"max_value": 4
+					},
+					{
+						"display_type": "number",
+						"trait_type": "Generation",
+						"value": 1,
+						"max_value": 5
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Sci-fi"
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Cyberpunk"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Distopic"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Street gangster"
+					}
+				],
+				"encrypted_profile": "16d76afa720e20175e4ae02015782ea12e66525f9eb5e072bd63dad18b206e46a1cf96ac00dd547579c7d502c99d298b9af37cb1c1ae99b278695f6d7f719d0d7b886abf2d5cc297986559c1d44b0e88ab884b7147e4f0e86b56b7ec7ae05f3eee3cd4875eeba4136398d2732e7b2189d62dcc2af6e2092c1e03f9d081bbfc5af7e6ed5384f1339772aeb9913fa3666ab84e6df63fa7f5c14c4999edbfe530d9674c4275023cac4c0cdf4fb425810b664c3fb06e1dcbeacc400c9e84afdb84332b5117619c4c9bfbac9a7ebd09ea5b345ef2a507660972e24c9c00d5325cc9a7f4e9426d19851f0e160addb8eb6d8e0fdb482e92a3a2bf5d5230d353458f8f2daa4d85cae866a7fd7074b5a1905505ff82c11872975d98cbefdc13a0efca2c2a3042657962db38ae3b6b12d399ac107fe883fd5ec147f9d78f7b46a201a5b039b021076e330dbea65cfc53d40509a14b31b712f68c52effcefd5812c3648ec6da79fcd6764d78f0e80fbaf7ab0a3885d9f80ad9143535733f34c9ef33e5c11a0cb5b28f30198cc93b26febf0046951328ffbd8f5ff566c950f9cf990c153acf06ae4e5705544c6268a39a5f876bef3db8555e143ab9f3bc271495dd2e5e3e728412a69452250518ada06b57b4513c3c6fbe062870e57ee5039ecb40ff66adae4ed700af5ab17b8c4991bf63c6f9c7871528c4420a4bdfea38709bfb4a01723214b5aeaf792ae53fafe860cb51327330124a715fcfb6675fa0d071826c85eb90bdb2bbcabb7891aee4ff37dcb0fda8bf36b42fde9a5fbf375da53d8441f8ea1b422c27156cc8a9dd6d700cb1ed39f972e4cf1632ced857d7a7946bbbeffe141114c7ef93f195b8006d7f33b1f05f48a6e6342c53df2bd765b8b7340f5089611ce466b64dd3f58bb31e5567b16666384a2ff2aaf2f3c2c9ed8051ea1cb51b2039bb97cbde2cf347cbb5d1a6896e5a4279e2732a3fe05abf40c327b3199656b5d217b9e79f2d492b9b6ef3a80c90e2175836b1dbea2da6e6e5b46026ccfac79ad5c5ba9822690af195cb9009890b25b94eeadcc57c683d470e52aa72149222c76d1b8a8225d74af90514b8c775949a158023be5463699f0e9d57df1364952255c2beb60e75b4d5de122befa5f69d780e4d9c6500f81bdc8d358232f0fc7575afb8be2cce0311ba68f4d9047cc27d09eef7572fbbb3498799fc86cbf80d648bf2578f26822c40fbbd0733102dd679bfe2311255f9c934bbbf1769e3ddd3c6dc701ec6a5392a84945b971fc5cbc61f7c74749096d667f02f7b0b59428cc7e0502e935cf278212f6692d33c32f79204fe58effabe607e876d9b11a98ed5f40df1b0ba67a03d306354fcff9ec1c169925465245bd5aa2cf864489ce1fbbd68faf7186381670258a33993bd9bb4d7249ee99a29874a3685380ff229de5703049da05bb46826fa8326828e408e93b541a7f696b60eed0a7e675df6cb7bd8af7c8301d250e61a22b29302323329900d0334e37c1b580a9ba39dc8d138db6da838fadb181bf15398b53c3403137e279c1958c743eaea099748f385a3b09c184cae61b983fdea8c9c214d1331055b928cec08fa091f5dd8d113f8cd605b822213f796d097f5b39ed8937ab9fd37128a255fc921a2e7a7b4113abff88802b861e8109d92e95f9abdbb926297d3998277e14852f761e7d0bf35458a357edf9221e9c11d4eb0ceb1de5af0f72c158c4833671998660c92faad6616e960d45cff8848a277d4794aaa7807f97f2ad8774b212e9e082334d32a05591bcefba20d8fdd34c00dd19a427690198857788f7f5f060c3be74ebe6a6e0f1a877477e5f503128db2d485b28bf"
+			},
+			{
+				"name": "Augustus 'Augie' Eastwood",
+				"description": "People say that Augie is crazy, they call it 'Eastwood's Luck' when pilots survive impossible situations.",
+				"image": "ipfs://QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Augustus_Augie_Eastwood.png",
+				"external_url": "https://ipfs.io/ipfs/QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Augustus_Augie_Eastwood.png",
+				"attributtes": [
+					{
+						"display_type": "boost_percentage",
+						"trait_type": "Rarity",
+						"value": "Common",
+						"max_value": 4
+					},
+					{
+						"display_type": "number",
+						"trait_type": "Generation",
+						"value": 1,
+						"max_value": 5
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Sci-fi"
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Historical fiction"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Distopic"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Post-apocalyptic"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Retrofuturistic"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Steampunk"
+					}
+				],
+				"encrypted_profile": "66992b9b3fdcd7e06ca222a786c9466a466ca1d5cad24ccae320dab533540cd51d04fd0eb048de7c1eaffbefe28adba9ccff1e1298c903579b6c531bec8cd3fdf23a349dbd037716e41c626b46a425c6bf1c191a5d7e9041ee84f6faecc40c3088b31bd075c2eeed40d72a5657e42fcf67fac4ef2af24a198875b47ffaba0dfed78f9332bc8e21965040b04f4f14082a42e78b32cd84916ce20e472e8c8d87c26c9138450df1f820a392329f3db312a8b7cb07e2174886f27f883948864208dd9012c9b4abf2b70e686b36157212af7a74a5c3e0fdab00279954eca7942beb586ce510431fbc0e3f83b828d47fa3d34874929d3dd5d8f83d26d5f4a2117b19d9ecdcbfc452c21243ff8ea2bea56c3926de87bcbfb4131e05c8b028ceca4a2bb46d2d41528e3f3925b538947190bfa7f5d2db763930579e860fb93fec4d4cc4adfce7ee8a103e0d81c7c836fdaa976260250cc6eb64732689ec4ae65bc6de75b3c8f3bccf2ed66670f9d8c6593ea13abe294e6d4dcc841d22784dd520a6abba2c6f9756b62f45b300ff9314944b36120097dbe1050fb4e1c6e8f88a3cfc768a0f4e21d66d265e8424f48d00bb7e747695b99a26801e7ca30cf7d5775a9a961a761a92117a0c6be4d51dbb8a1ad8f42c2568919f80db2f6374b32e61c89ab810a32c2b4a733f285e9d7ebd8184818b503ce0a6818a7fac75d10ae535eb5e8585e52ff1645194b20b432cd92b512d4bc4e72850816c86bc32f5f171c0a59d351afe2674142835ac734dc2d3fba7e4dda36685d0f6fed9d80d1c1f31154c0beab0d202da75af2a5524b1e71051acef72e12c833df2d3569fb2dc1c7dfd2a89d5bd098e36521f655ade2ef8669dbdd663a40023337794622c71b0a67ac562d6620f78e6dc5b807379beb6df74f29c2c135164d311d17a2698efe28e44b4d8eee889ddaa4d68eb0cc2fba82c80dbe3a9b96f8dfbde1ff4a112f5b2f9bd2d1dddb292e5a34e31b41fd1054a1586977e314ccb7345ade81fea27836a6498e2dbbd5e58f9adf74d96c13ea0a800dc0755ee34d9ac4e92e57b7ffcaf8db094494d2dff2994efbee8b8bfee028f774accb93d2d15858dda933f1cd08eca5bea94670c69255bf2045700a7a3b5529cde56ead259599550ec04904d232aacc5c0bc98201620baeba22afd06f35dc4754d51ba560f41436be5df35ee4b9e42c6416052b7021a15ea22d9cd4dd1a4e71d2ef73eb856e8dd30fdafb1a6a6261cd51a513337f4f6329325155969e6bc2ed71bfd9ace1df92c3a4114abca81e7bfb7c7f48ab080e2936bfaec6ac19b9db8ddd0fdd056ffaeb4a1c90fe7150569e08f4a82841f138f32d6c10e4527bb377bcd919a58c0a31340acc38fb4e5746c4bb2c4dc711a7411a45b5542fbd479f9d38ee65c67fb9a34b4512860e56480e6f5d106b41d6a001b2b0ad16becc1b08413952232ae190b41976f862530bb1ea640981f36d5519cfa3599ab64f4332148f7a3d2eaace17238de105704a581ab94bfddf3c6205a352e5d27e7e533dcdd194b89edb3f9fcddf1e8240a6c11e6e5311c814c276588716c7d7722f6d95abae901b0f2b335fb755a937ea41743bf49dd814b263d98deefd288dcc1d0b7c4ad3274d696d6c94549074db010940b60632f076f748d34597bb17f072b78000f2e66f3f512aa319031c7b46c2ca7ed3dc333876ef208c4d8072ee37a4d7ab323fdbc5b69f7b0076229de4fd71109d5e8fe2f199b7f7b5c1208381d80433fdc7a94ab8cc4f1f2e2c4db3f3a55e0a3616af7cceab7bea5a1be26c1a71b4ffd93b006bf86f75f0e7b3186d7fcf2986dfca02325824743a6f3ba86c2ccfb3442833984d1f230802d4e68adc41fb5dcfbdb62557ed4d8dc8b718d2edd7115d5652b969abcb4528b6d27d79bfa7020afb284b0d52c6ec57d91957e5f294dfcebc6669361d6cdd294e258231d8715220b4afee16b798f4980b999f96c5af540a5845540bc609a3e6c220a691a3f80c1dc1bc1e1a3068e7de08b260d5bf86749f0f956596964f8476cd902b4e4e357fb9d8354a7a3aa51d1ad6518ffad4634ee1c4f2198cd5c1816ada6753fc8863b2eafa3c20d4389f659552c4d6018ec21795f4919451f154aae30fb8f32504f6e8a1549f86f1ea0464722142bd073a419ce844468476500cb804278385f461b9bdde35274658e35f14579c26babc9a487bc29e60d1d493dce594de803c7b7618e147444ae20d0aa6328a68bcbcc683c603f13551b1a406ad20f2dd765b30d99f81f381b1bcf4e3717745a7f11c167739ae40f2ae7b7107a607a5897e3b3d28f8c317a1edaa130c4bf9a2a4a1525e8902bf50241ca50ccae418d8de34c47aaafb104e16fae95727338650817569af2a07d3991f2cf17d8a1a4352382fb887f9cfa6fe93ee3155b28033640401b9bda422fca91160ef6488635c988c6b6ea4783862224b091c6698113dd9488f87c3f8c6af88ebb5b54852d00fe6e6fd328da959e904f85fd122c6e4d4b688d3072025582bb6e9310b4dfa0b95c21cd0850007d70ba4753b047653148881de719948e486ac9c70be51c6a5c69c0124a7d799d821b7c4424ad9c259fdacd94e23679ef15c5f89c2988bc2d8e1a239dd2bcb550ebaecc88af1d31fff088735ce4808f10bd12e0a6b1c9a9805fd2717baa1da1dc1009f38dbd35a79cdf60937b9b55a5f3e244"
+			},
+			{
+				"name": "Kazimir Koldun",
+				"description": "'The spirits whisper secrets in my ear, and I am the vessel for their wrath.'",
+				"image": "ipfs://QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Kazimir_Koldun.png",
+				"external_url": "https://ipfs.io/ipfs/QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Kazimir_Koldun.png",
+				"attributtes": [
+					{
+						"display_type": "boost_percentage",
+						"trait_type": "Rarity",
+						"value": "Rare",
+						"max_value": 4
+					},
+					{
+						"display_type": "number",
+						"trait_type": "Generation",
+						"value": 1,
+						"max_value": 5
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Fantasy"
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Medieval"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Black Magic"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Superstition"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Epic Saga"
+					}
+				],
+				"encrypted_profile": "9450c91e95566a462d0ee128d751c1ad12deef8ef2943dd28c9915cf2253e0f83d36e056a74b2a0645c90ff2bb63e694fb371e1771886a922b3a23384cd9265d84e844f537c3296eba6a70df0b7da7d72b52552dd9f207e5c473570af8ea93e3700af5bb793c6b31dc9f0c9c52dd050464b3a1a90bc654f4c225e2d485b81ce17f714a3da3dc31706fe173a4df55fd78a65406d2e92afd087dd525b07df7ff2b8f18275ecdf6ddc5b116e19265be5eebc18849727b4a481b45bd39e622b1ff13c2a3d43eff8c94aec3a8c42af668897c1e2628d28f5ec5f466acbae3509a3799749088c0e332511c22b7ca2ca0e3bd11ff69fd3477d09bc38798cb6163df9079eb18eb9eac526e978803430186a9ec9b318340eccaf487807ecad2d890ca3fd67e682f67a9ccf3cfe294d2585dd37435917f6c7c3cb0dcedccc275074541c6a3922b8ed01acf7d889df515f4960799fd715cc66726f43b6500fda22c382a009c5b87bc850153ab9a90be4c97223ff154dc9a0ae8f914e447764472d8890115b7d631692f927bfa8bc06da4227be91a69ab56a03f3706cafa8e12085fb1d56e947ad9b8cf04fc0482993889ed5e6875601f1320634d7d0a8dc61cf3dfdc387ddff6ebc05c81c19781962cade9d9d61ee46e5e994f6339f16706ecbd69f8d96a726c2efb779d1ebc14cc0d2aa44f6691c6d6c960355699598fb1e0bf6853d0d47d2c2c05632e4d175c829cc4a78ebfd46adb465809ff91e04f3734b7c682a6c6c1b582f548d47c256500e391ae9810cbbaa9a4f67c0ab29eea7627bc0aa222984b18644f250515468d1350b7aca1fdc1e340a0149bdce3de9a3ca5c774a78164434e9b286821cb4d5f4d097c96f004c1fb7e75ede2b6c51c4c1d2be6c725d60a3dbef15f6abfb504b4f94b87dffb2ce35e508e40863066a61a7e8067444550764fe96be6f754be223c5f7511264e39adf8cb05165753ca8287f4e0571a7178e8be352b17213d316a35454b6ffa4fff61df9602b865049d0323a3e8f6c441b5961ee0d667f4fbee8d7a733ed433f637645ca2325cb92358eda1af6abbc17d8825ea5903052f323e32c6adf90c4ddf4a28880383bcc78b568b4dfc1938869dd93745cca3b6529cedaeeb301b3d7961a436aaef49d3d930f7f73e6f840cb286847729d4b7f9fc13d34d06af8a0a323d62702f6e84ed0c01168304160183361a5899239c9f0554f49d5dd587e8166fdaf608e84c2f6a4271c742bc84fa1af7f40927d19aa8be3c068f595944c19bd522b96b66bbdac33244caf69b75c8d4ba457fe4b87534c6da3269b0d75bd214f06711ec881190b1bb0892321b3f49dba2a13dc1d30dbdad931a162ef0dec892d8e43e32a7725a1c9ed8898368fec91e17196719289ac9d875039d1e52a2b12b435cfe96949212415d39f37186b186330202833a1f16c50b41bc98d8a5f347b0421a4173e4bd42f1f51d2bdfb501069be35413f75be3818acc60bd343613b574535efe001cad463d23c2fe782deed952f404f7db6f4e9fee4774cb5026e29d3bab0712ad94"
+			},
+			{
+				"name": "Dark Animist",
+				"description": "Those who seek to understand the balance of nature must first learn its language.",
+				"image": "ipfs://QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Dark_Animist.png",
+				"external_url": "https://ipfs.io/ipfs/QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Dark_Animist.png",
+				"attributtes": [
+					{
+						"display_type": "boost_percentage",
+						"trait_type": "Rarity",
+						"value": "Exotic",
+						"max_value": 4
+					},
+					{
+						"display_type": "number",
+						"trait_type": "Generation",
+						"value": 1,
+						"max_value": 5
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Fantasy"
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Medieval"
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Celtic Folklore"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Black Magic"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Superstition"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Epic Saga"
+					}
+				],
+				"encrypted_profile": "d5efe97a6e16a3ea268e54b3cc40641b02a887c71915430436c95d6f94ece3f6b8415f051af5a2b771cbc724138b7243d69064743292f3d67c890081eed0b8e04af215aa64e68c6597de28e1687d325cc3eddf87034021738cb2dc4cf19a5563111fbbd5a54cc4e266780a550f32960a7e6763f4f33ed9d80abd95f4486413422b3e32e2df888e299294840ea453541f4083d8231263a936894eb55047726c926876515b104f8df3a72c6951d170a93dfbd7d8c652743a41b62f60ba26065373cce6e57384c40d3547a0a550e2a4f4b5482596f34bd2de11af21b7a94c64ddc5f861e108044a81ff94e797afd6451373f0a8de8e2fcf58878c9fb7b85c30b217047821feca5cb2cacdf2180cbcbaf2e9208884fb74fc9ddf73227e032e88dcd9bb3379d7cca76d0844fea30c36bf9e7f8b4c81bd8e1771ffd8cb5b0c3c2ca5788ac4dfed5602bd38e0851391da5c66185ec3345d9e1d86d2d2b4995b0096ce3a2ae747472349fb6e98231a72ec9bf9773a861db6ffc5b05df23919d69b703c399f8254a135c0a72d8196c833a04bc33c5f3b0fa65e7f0752706f2d6c3f448aa602bc75b1b7e020784cc26265db465ca1796c2696a5e4ec40731ea6c06043c822d386553f11379b2a949c259e5d468b45fa187869316bef37b92fcd18ae3545684ea695b749707620be7843b1d4314e12c866b22758d9637a91dbe9a074f202515e7bdb9294d342ebe43a9540f788f081f07c1203b3d710b91f724315dbbf90c1ab081cfc41f7e0849d1199ffc2c9e2c159644180e58e124216d06d7d39d8026d97781ae0b13c1f395c9e3959098affd51db4e9002ebe3a910da8018b4cbf827c4bfcf1c20f567dfadc29ef61f992600a3c688c10b256b25dec41ff866f01dbb97c3516f65cbd8e82bf7dac899d51ee3e5e1920b611dca4faa35d3e4b2278b6272dc5ad47eb7b28a2867ba4b28645fd3e1211982ad8519f692a66cd9c0ef09d8902269da880336be7d4a491d240bda66fe5babe69894333a8c751f34593c3c8695da4c8047cf92b97d41d9d41a4f7269ec8de6ae2920ab8b92b0e8ab54ce51aa655549fc796f998c0cf1a7c79475ffbb8f85e47b3e343ad637d2fa4de5f96c4df8e8fffaac5a5b20a2d714071a81dd0e4f5001d4e8ee181efbf96cb2535e3635d04bdc913777c2beda1a7c4a79ffb6307e9b52f03b1db0e00abbf332691fa5283a7fd2e9595fd4281e48ef6c44c9eb74ab380aa65078afa5b9b01e77069f8285b294cf1293011df33feed6c4410e6b0ddff588c81b7d29cc1dd7b17706c0992c21e5b7e5df94866850ab1d882ab6a47e46c794622a294da0392b0501c3b4352ab45aabbac8b9b5a9ef8e4b67a7b415451093e3e7b895e40de9fa0b52823d16de9ffae98635959fcbe653ddfd4b907b4bd73177c7588f20e727b19e95a6a2faabc4a5d152bcc43066a8394c8b054d309b3b8a1f3df4fbe71b5852ad8d5c46b22e04363b61366aa767f234accb87b4d35c56b85b530a42fa0ed0e2b7f8105ac18f984dd93640f4b4e2227424542915cec456d68a8852f4b8e835ff319450d2ee9fdde43a3e2adc99c6e47784c117da9f08b3e7455ae5bd296ab89f52ae8a7fec6131bff7ac7731ddacffa448c7e2abae055a072a14e85ff7852aad7ae5d600a30f4d2c99fe980cb49bc5248c35c30e920c3"
+			},
+			{
+				"name": "Malicia Folcott",
+				"description": "'The darkness that consumed me will now consume you.'",
+				"image": "ipfs://QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Malicia_Folcott.png",
+				"external_url": "https://ipfs.io/ipfs/QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Malicia_Folcott.png",
+				"attributtes": [
+					{
+						"display_type": "boost_percentage",
+						"trait_type": "Rarity",
+						"value": "Rare",
+						"max_value": 4
+					},
+					{
+						"display_type": "number",
+						"trait_type": "Generation",
+						"value": 1,
+						"max_value": 5
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Fantasy"
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "XVII century"
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Salem Trials"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Black Magic"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Dark"
+					}
+				],
+				"encrypted_profile": "1409a143852ca878932f0e4446f2696ba61b7894be694e7db78cbdd45ba72aa548d7312de4662516b7daf3fdca4396e69fec314603d1e0e21574352b802c7dd3047416a7eac32c2210e44667e5ee28537a783c7cb26490454c74a6d94e877f84cf3d9e9b3bf48573c2e0ee4dd93ccf82c9dfaf0f608a8247115f61eb910d1e2119cebd31a5895323498153102922db0fd1c3ca3805ec3b28438cd8ee7c199c53e8626bf290be8ea9ee941dcb0839b7f32a4150cd7f5089278c93db24b718218ba9637cfb805d42080c10a869954a4e316ccdebade08d233dcd4e17067681110c0bea83f9fdd73e751409e0a31a58224ae2148cb11eb194d06a507f9422b261edefdedd1fa7d6ad9934ce22a11a34b2587fb867ad3c86c569c0ad7f3cfb9ac0460e3b5c9d2be3856ab9162bea4e74accdd15f0ee273f3daa62df5f060ebe955d34d0d548b580535ebad1404d1645ffc097125d8c6e81ee036e286e64e78e33635ff307cc5917cc05a010e81a67558f76773a2593e62891c8da0c49c3a14fa9ce2b631b021829d997431ae9a6242b2de72f2c3ccca6487ec8a8211111049a2cbff604a0c7149401c73e070dd1c66582c9d6c2a5fd9ceaee90b30fbbcfdd7f965064ab1a34fb73c81a02d3537abc5ef358a49c8658d895d22a10f945ccbc01b216f2784ef34b61ef9a9efb77fb45c04820a4e80d1901e4de948e6860b56ce8396ae13cb9852c609d896cebf1a9f10d3834f1ee0822a2319b437da8082226061a44a21e0d0d025ed81e18cd50bf5d5c9ffb89fcf6bb7ff59a187b157079b2b6910c6fccb47a40b0ac2e28126edfcba444f76f260918c919b56fa16cf57c8d1f13cde70c9a8a8ba8d002db4f94892b4c6aaf80245219e8d3f7993f98b5aaa96eecb1aa2178c23bc7646c7df1fe1683c476d70b95a2796466bd1598e22a960f9b2f91539a114e67cd5f2e48a059bcb9941e349a4bda6dd23e3f1bb6b25af8c62fcd5542fa8b385196da60650f47b1fc28d6c7104496784f21865f2e538affc9976d68349c92f280233165ebdea20499362aade472687b1e2f66c4139f80bd64834ae08fd9b556a4746180c29884768506f5f1b942d1805e68979fd0cca01c2cf04cc479e3219455d0704f2bd2fe1cfdf53c2625bca207dca8069d23a6bc7fd9187fded7a5734cb8aff0731a8181183831f00cf9850803b439fc6552ed6f3ec60c1da654c860708eb900299a0c2667cd99a7711c612657c06d3ac304bce71cb19f994daacfccbd2b26449038e251b7e66119020d926c3af9bd4824b867a3b8ed58e938a2ee826d09407cb62b0c9cff3a9a603ae5b357a5790d899c2880a4ff70008d857c212e87fd12453168c9f0b4ffd78f3de195c82e41dcf1bfc7201ac7f407e8b2bef2e4a401084614b90072d1c592d7ef4f7aab75b49cea5b1e43611261e0452c943cad6e0430bbdefb06cd5be94d98354bd81e99c95f68ebe7b7689398035bbf72366c9e43c1c11add5fdb9741a16698e7e68c780326e4beceffac3625facadf20dffbd3605d45042e09347eaf6dfeaf7cfc72b6658054f7abad231e0eacf221c1f09792d9d91a5043a2ca565a239551e936a084e9c14b0c271bc2744d4f4c9f882422471baad8b42b1029e74a28b6042eaddda6f5edc4832f84a4c511cb19fcc96dfef0b72091850f3a814d2530f916a3ef37af55f357d516d0a0fe778427ffc668e80ab3fff736ec54b4cc0203f39c1218ce078b053054e0f3e779b34b58fe06dfeb8485208bf553557f95d8ebe5d6b6a79ad8111228e9ea8efcd87fe3b6dc699656a0f6557578869161f4b04f2d5ed6fd0c3adfdf8367d6ca58272fd248327ec1a1ffcec8fae3b4b2c80ccdc00134a2dbf09d11b5a3c8161e25ce85d80b7d0b9f4bdaaf10abf723f15eec4b9b5c4a474375bb56fb40f1592137d7437f12cd9ab0b7134474d098973ad67ffce0813025f9cbdf75416a6608605c5e83493326f3c272c176899a6c0c20b6635a652128a299c3cb64326258d3b9f43f6e06e9f01"
+			},
+			{
+				"name": "Abigail Williams",
+				"description": "'The darkness will consume them all.'",
+				"image": "ipfs://QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Abigail_Williams.png",
+				"external_url": "https://ipfs.io/ipfs/QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/Abigail_Williams.png",
+				"attributtes": [
+					{
+						"display_type": "boost_percentage",
+						"trait_type": "Rarity",
+						"value": "Unique",
+						"max_value": 4
+					},
+					{
+						"display_type": "number",
+						"trait_type": "Generation",
+						"value": 1,
+						"max_value": 5
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Fantasy"
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "XVII century"
+					},
+					{
+						"trait_type": "Ambience",
+						"value": "Salem Trials"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Black Magic"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Superstition"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Gothic"
+					},
+					{
+						"trait_type": "Mood",
+						"value": "Horror"
+					}
+				],
+				"encrypted_profile": "908bbd9bdb35864b622c9f33183b242087af2987c20fd41a84a174e9398ff1ee57555bad4030ab4c2c96ac7342b0c639eee21b9bd0143f68aa85f2fd9885bc8040e274255d0275c34e406e6ebcbb8427b332d99115dc8eec7bd5af6d2778cb731868cad2a341b3cbd8553e0a9d8bcadf29b417359ec7a9985105bc642e3047a8a4bc8ea05fb2d87fe8320205b536b506351dc1002a7d64a2974f58a40365737b23ba27ebf6848e59a5b156bcf7c41d6fff51dfb2995a456669ffa03cab1d14ea14e0f35d57abc9c79300edb6f1c4cc961abee2090d04ab52aa39a4baa4e7542bae02bea422914964cff7bd165d74320a09ecabc664051a0f11903c1552b43842a5e78098c9cb3a8fba303640fb27cb9996158ffafb05e09860df5e5e358213ab848c9e6ebce0c9758fa8763eae858b812626689a7e344c5d5432e24ed76fc390c9714d7bcad7434c96443396e1c5c51f75b914e12eadbbd13686d823fdadc1559bc936190fd57b7bf4ced89b951e444494d1e669f29ea30d9469169aa1e9f740b3ee2120600bbfaa397a80f59ec499b239714f76790ae0ce6c329b7026e3f5c34f434230601c7e45b975795470e1f6760d306d332fcc1216f73c3808cf73332b9facf10b337447e6c3249e0a47808e1ecb91927964e08b2a1c1b88c793f5f7c0ecdeaa58108eefc77f9033c5e1c404243b200707034712f2704f090ded655186473079110148a3dfa1a66132ad539ae7da53738b6e2e93b970b9a64f3d8dcfd13b06ec3b9783ef83e567a117f4b84160ae94c3e97e8b9bc570a7e3520b81e212af4afa0cf141ad7df8ee525c66ae5adf7cb121d7edf1b97e6ba35bac39c1d3ef3fe987eb4cc3f180da31012cbfb0e763996a8eefcef0550943be2ae19e0cc73f85c33276e003e4a92d6942c53bb1645da468c2311d72494c1b25308eae7ee57b9c5daa3a4474430a82e672b7667699d8751e4753096c4c0bb4d20edca4574cfced67ba335de91411956857ccd04a97adabaa61ad7d79a3ffbc72e44a379060a78669b5110a3035b975f1da7411e9dfcf013b010fdb857ec14665823da657aa27a577083a672ef90b54bf3b2c28985037efa30cdd7309ada35efee6f3a0e453d4a2ebe9665576e139c72ffae57449c7e6a5f360f4bd9af66fe68370eac97c5f44abbd0ac259e70091f856e4289d725030c89c3fe0f5bcea0f10f3ad98fbb9ad19be37f26e30b90cccd6f68e48dff8323d1395e7a51fb69a24a14f9c3e03aaadeda47dc918ba44bf7a1b4aceee3ba9d3fefab1264e4f127e41ac008a0dff84e70134e11469f643182755018f219e8f296c0206dfb876a3a4da4ac8a3433cf47bdaa6fd2bbc9b9a401e7c9c8d8a68c38e9956c871bd7014ce217ee3e8acc52a1ec1aa757daf543183d6ce192437b04370495c5bac520eefcf25184cc1d8fa59b074fb4e5821f876d7fae628aee0ba1475eb957d57efe75ab4c9dbad9bccc50aa160e7ed795f24c54898aee6a36f80f668d70dac4eb8c1dad9c109d72412129d53de8620fe37cb646e87107b336948f8ceaf1b598c58645f0082cc804deb9701c08c573e8ca71956cc1327fe19d045f0059afc38192fea01350b35aee81fac2b78f2e7ae4c85ac1efdcc36d9262fc52633b584e575d343b76beec7439ff39a949a55a1f5900fb51a3a18f240614d978ebd53ec465ca3f615f020d2313ec308c8b73f06c7d3bf1bbf16708075993ad6c8b8964221aad0b0be83da8c66f26e6439d53f48bd7c6cf261dc1688e8116b1d42f345fbf346cfb295e791af9fa6fe07e5437011d07dc23f6cbd8bde967f89ec211299eebbf5c9faf27f67cbb3783a6ca694f6472f98c09dec4edbf77dac9e40c2666f8024b9b250e4c02c7ad705844febf9f587dd7a8dc545d55a6dbcb5a448f24be80e6fe699d933ea1c9e7dac1d77baa46de593d44f1d8eb82e5573b5a659e9496b6944ead9c15ed57837c9cd10ffd1dcfa84c8cf34ebda663d6f4a465beb70511e3d191b1f9163b72eb6f00e27f88d2d8773648b84c38f6a6dbef3bbd8fedbd99dc4d0381c0f34adb48db8cbccda593700ff94a803e719a20a14df6c73e32af7192c60fed6206b9304069a63bae05b96666ca7f8d2a8515e3607d81e47691d07699a90ec10d0add85e1d4642d679ddc46d8ea580362c2cf31280f6632e01f6104a8ff07aabef7dc4b390196f7583469049c4126ba061e8e474aa08fe34ec7b9f4dc41f761fe300b0fa15b280337ded31bca9bf3e08bc7aac61453619d4d09b6f7e0adf090fe936191df641789e436495a5f8316d5d13b740319bb174c8ae09b2625eed13b01fd492d2c747caff6a4d9a885fc6be899f323420597869cfa2683d8ba8fc23670794b4f3706d910c013df35997abdcd4b9d4b85e48ce4078ae7f7f135d6ef4416de378d8841be32203d9f77d06c5d0bddfeb1ba869c1f7e5f702e29d2cd077b8d36c8b11b9afdfa2e649c2543ffdf4ae6f16db1318785ff4edf017112541b7e550b77fe528d0e7fa013b3d351f721ff0eb0bc77253e4835c40900d27534a9a7a4359a1c43722b9387acfa0d56c22e11425f8ba5b14b0cb6a22f8dadc18a4312877cb59ceaf58771370f1eea703b0e1c6d8d6b39983bb79143cef14f24a862854d7490f9b9af2711efbdf6268a6c359ce52411973648b27ba2ce64f54e06303aade145c942b50ed2855ed41088219e67cdd5ef612fec784f8a857a213a1b6701d3e3e3a4a21f6074a87542581fec364e34d5d0429bc921e0042c11e75"
+			}
+		]
+	}
+}

@@ -1,19 +1,33 @@
 const PINATA_JWT = vars.get("PINATA_JWT");
+const IPFS_GW = vars.get("IPFS_GW");
+const fs = require('fs-extra');
+const deffs = require('fs')
+const fsPromises = deffs.promises;
+const path = require('path')
+const axios = require('axios');
+const CryptoJS = require("crypto-js");
 
-//npx hardhat upload-randomworlds-collection --contracttype ImmutableCollection --season RandomWorlds-Season1 --deploymentversion 0.0.1
+//npx hardhat upload-randomworlds-collection --contracttype ImmutableCollection --deploymentname RandomWorlds-Season_1 --deploymentversion 0.0.1
 task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection models and metadata to IPFS via Pinata and saves the returned CIDs in the deployment summary file')
 .addParam('contracttype')
-.addParam('season')
+.addParam('deploymentname')
 .addParam('deploymentversion')
 .setAction(async (taskArgs, args) => {
   let summary = {
     contractType : taskArgs['contracttype'],
     version: taskArgs["deploymentversion"],
-    deployment: taskArgs['season'],
+    deployment: taskArgs['deploymentname'],
   }
   console.log(`Importing images for the collection: ${summary.deployment}...`);
-  
-  const colDirPath = path.join(__dirname, 'data', summary.deployment);
+  const split = summary.deployment.split('-')
+  if(split.length < 2){
+    console.log('deploymentname param does not follow the required format (RandomWorlds-<<data/foldername>>');
+    return;
+  }
+  let dataDirectoryName = split[1];
+  let formattedName = `${split[0]} - ${split[1].replace('_', ' ')}`;
+  const deploymentsRoot = path.join(__dirname, '..')
+  const colDirPath = path.join(deploymentsRoot, 'data', dataDirectoryName);
   console.log('imgs path', colDirPath);
   const collectionData  = require(path.join(colDirPath,`collection_data.json`));
   if(!collectionData){
@@ -36,7 +50,7 @@ task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection mode
     collectionDescription: colMetadata.description
   }
   
-  const files = await fsPromises.readdir(path.join(colDirPath, 'Models'), (err) => {if (err) console.log("Import from directory failed: ", err);});
+  const files = await fsPromises.readdir(path.join(colDirPath, 'models'), (err) => {if (err) console.log("Import from directory failed: ", err);});
   console.log('file names' ,files)
   const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
   //try {
@@ -46,7 +60,7 @@ task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection mode
   let imageNames = files.filter(x => x.includes('.png') || x.includes('.jpg'));
   for(let i = 0; i < imageNames.length; i++){
     if(collectionData.filter(x => x.imgName === imageNames[i])[0]){
-        let stream = fs.createReadStream(path.join(colDirPath,'Models',`${imageNames[i]}`))
+        let stream = fs.createReadStream(path.join(colDirPath,'models',`${imageNames[i]}`))
         let result = await streamToBuffer(stream);
         let fileNameSplit = imageNames[i].split('.');
         data.append(`file`, new Blob([result], { type: `image/${fileNameSplit[1]}` }),`${summary.deployment}/${imageNames[i]}`);
@@ -126,10 +140,34 @@ task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection mode
           metadata: metaData
       }
     }
-    fs.outputJSONSync(path.join(__dirname, 'deployments/ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`), summary);
+    fs.outputJSONSync(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`), summary);
   }
 })
 
+task('generate-deployment-metadata', 'Generates the metadata json files to be manually uploaded to the IPFS')
+  .addParam('deploymentname') //split '-' --> RandomWorlds-Season1 <- col metadata en json
+  .setAction(async (taskArgs) =>{
+    generateDeploymentMetadata(taskArgs['deploymentname']);
+  })
+
+async function streamToBuffer(stream) {
+  return new Promise((resolve, reject) => {
+      const data = [];
+
+      stream.on('data', (chunk) => {
+        data.push(chunk);
+      });
+
+      stream.on('end', () => {
+        resolve(Buffer.concat(data))
+      })
+
+      stream.on('error', (err) => {
+        reject(err)
+      })
+   
+    })
+}
 // ------https://dev.to/beresiartejuan/cifrado-y-descifrado-con-cryptojs-3h5g
 // - También podemos especificar un vector de inicialización (IV) para mejorar la seguridad del cifrado. 
 // El IV es un valor aleatorio que se utiliza en el cifrado para evitar patrones en los mensajes cifrados.
@@ -314,8 +352,3 @@ function generateDeploymentMetadata(deployment){
     fs.outputJSONSync(path.join(colDirPath,'metadata', `${metadataFile.fileName}.json`), metadataFile.metadata); 
   })
 }
-task('generate-deployment-metadata', 'Generates the metadata json files to be manually uploaded to the IPFS')
-.addParam('deploymentname') //split '-' --> RandomWorlds-Season1 <- col metadata en json
-.setAction(async (taskArgs) =>{
-  generateDeploymentMetadata(taskArgs['deploymentname']);
-})
