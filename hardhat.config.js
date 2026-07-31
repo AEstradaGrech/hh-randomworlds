@@ -21,7 +21,7 @@ module.exports = {
       },
       evmVersion: 'cancun'
     },
-    allowUnlimitedContractSize: true,
+    allowUnlimitedContractSize: false,
   },
   networks: {
     sepolia: {

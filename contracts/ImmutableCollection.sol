@@ -50,7 +50,7 @@ contract ImmutableCollection is LockableCharacter {
     bool public isOutOfStock;
     uint256 public defaultWeiPrice;
     mapping(string => TokenDetails) public paymentTokens;
-    string[] private _enabledTokens;
+
 
     function models() external view returns (string[] memory){
         return _models;
@@ -61,17 +61,12 @@ contract ImmutableCollection is LockableCharacter {
         return modelsMetadata[fileName];
     }
    
-    function getEnabledTokens() external view returns(string[] memory){
-        return _enabledTokens;
-    }
-
     function enableERC20(string memory symbol, address tokenContract, uint256 multiplier, uint8 decimals)  external onlyOwner {
         paymentTokens[symbol] = TokenDetails({
             tokenContract: tokenContract,
             multiplier: multiplier, //100
             decimals: decimals  //3
         });
-        _enabledTokens.push(symbol);
     }
 
     function setIpfsData(string memory modelsCID, string memory metadataCID, string memory ipfsEndpoint) external onlyOwner{

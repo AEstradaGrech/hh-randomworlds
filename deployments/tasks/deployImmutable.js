@@ -553,7 +553,6 @@ async function getImmutableCollectionSummary(collection){
   let isOutOfStock = await collection.isOutOfStock();
   let defaultWeiPrice = await collection.defaultWeiPrice();
   let models = await collection.models();
-  let enabledTokens = await collection.getEnabledTokens();
   return {
     tokenName: tokenName,
     symbol: symbol,
@@ -565,7 +564,6 @@ async function getImmutableCollectionSummary(collection){
     logoEndpoint: logoEndpoint,
     isOutOfStock: isOutOfStock,
     defaultWeiPrice: defaultWeiPrice,
-    models: models,
-    enabledTokens: enabledTokens
+    models: models
   }
 };
