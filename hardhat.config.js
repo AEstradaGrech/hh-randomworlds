@@ -7,8 +7,9 @@ const PINATA_JWT = vars.get("PINATA_JWT");
 const PINATA_GW = vars.get("PINATA_GW");
 const IPFS_GW = vars.get("IPFS_GW");
 
-require('./deployments/tasks/deployImmutable.js')
-require('./deployments/tasks/setupIPFSCollection.js')
+require('./deployments/tasks/deployImmutable.js');
+require('./deployments/tasks/setupIPFSCollection.js');
+require('./deployments/tasks/deploySoftToken.js')
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
