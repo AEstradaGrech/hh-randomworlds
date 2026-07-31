@@ -1,9 +1,15 @@
-  //npx hardhat --network localhost deploy-immutable-set --deploymentname Season1 --contractversion 0.0.1
+  const IPFS_GW = vars.get("IPFS_GW");
+  const fs = require('fs-extra');
+  const deffs = require('fs')
+  const fsPromises = deffs.promises;
+  const path = require('path')
+  
+  //npx hardhat --network localhost deploy-immutable-set --deploymentoptname RandomWorlds --contractversion 0.0.1
   task('deploy-immutable-set', 'Deploys an ImmutableContracts Set locally or in sepolia, grouped by Collection name / topic, outputting the ABI for the ImmutableFactory contract and the ImmutableCollection that it instantiates')
-  .addParam('deploymentname')
+  .addParam('deploymentoptname')
   .addParam('contractversion')
   .setAction(async (taskArgs, args) =>{
-    console.log(`deployment: ${taskArgs['deploymentname']}`)
+    console.log(`deployment output name: ${taskArgs['deploymentoptname']}`)
     console.log(`version: ${taskArgs['contractversion']}`)
     console.log(`network: ${args.network.name}`)
     const signers = await hre.ethers.getSigners();
@@ -33,16 +39,23 @@
       factoryABI: factoryABI,
       collectionABI: collectionABI
     }
-    fs.outputJSONSync(path.resolve(__dirname,'deployments/collections', `${data.contractName}-${taskArgs['deploymentname']}-v${data.version}-${args.network.name}.json`), data);
+    const deploymentsRoot = path.join(__dirname, '..');
+    fs.outputJSONSync(path.resolve(deploymentsRoot,'collections', `${data.contractName}-${taskArgs['deploymentoptname']}-v${data.version}-${args.network.name}.json`), data);
   })
 
 const sleep = (waitTimeInMs) => new Promise(resolve => setTimeout(resolve, waitTimeInMs));
 
 async function handleIpfsDeploymentData(summary){
   console.log(`Handling images for the collection: ${summary.deployment}...`);
-  let split = summary.deployment.split('-')
+  let split = summary.deployment.split('-');
+  if(split.length !== 2){
+    console.log('handleIpfsDeploymentData >> deployment name format is wrong');
+    return;
+  }
   let formattedName = `${split[0]} - ${split[1]}`;
-  const colDirPath = path.join(__dirname, 'nft-images', split[0], split[1]);
+  const deploymentsRoot = path.join(__dirname, "..");
+  let dataDirectory = split[1];
+  const colDirPath = path.join(deploymentsRoot, 'data', dataDirectory);
   let collectionData  = require(path.join(colDirPath,`collection_data.json`));
   if(!collectionData){
       console.log(`no metadata file found for collection ${summary.deployment}. Cancelling deployment...`);
@@ -58,7 +71,7 @@ async function handleIpfsDeploymentData(summary){
       console.log("metadata file for collection not found. Cancelling upload process");
       return;
   }
-  let ipfsDeployment = require(path.join(__dirname,'deployments', 'ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`));
+  let ipfsDeployment = require(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`));
   if(!ipfsDeployment){
     console.log('-- failed to load the IPFS deployment data file. Cancelling deployment --');
     return;
@@ -157,14 +170,27 @@ task('factory-deploy-rw-collection', 'Deploys an ImmutableCollection contract fo
 .addParam('tokensymbol')
 .setAction(async (taskArgs, args) =>{
 //getFactoryDeployment
+if(!IPFS_GW ){
+  console.log('-- IPFS GW variable unset, invalid deployment data --');
+}
   let chain = args.network.name;
   let split = taskArgs['deploymentname'].split('-');
   if(split.length !== 2){
     console.log(`-- invalid deployment name: ${taskArgs['deploymentname']} --`);
     return;
   }
-
-  let factoryDeployment = require(path.resolve(__dirname, `deployments/collections/${taskArgs['factorydeployment']}-${chain}.json`));
+  let deploymentName = split[0];
+  let deploymentDataDirectory = split[1]; 
+  summary = {
+    contractType : taskArgs["contracttype"],
+    version: taskArgs["deploymentversion"],
+    deployment: taskArgs['deploymentname'],
+    tokenName: taskArgs['tokenname'],
+    tokenSymbol: taskArgs['tokensymbol'],
+    network: chain
+  };
+  const deploymentsRoot = path.join(__dirname, '..');
+  let factoryDeployment = require(path.resolve(deploymentsRoot, `collections/${taskArgs['factorydeployment']}-${chain}.json`));
   const { factoryABI, collectionABI, ownerAddress, contractAddress } = factoryDeployment;
   //getDeploymentInstance
   const signers = await hre.ethers.getSigners();
@@ -179,16 +205,6 @@ task('factory-deploy-rw-collection', 'Deploys an ImmutableCollection contract fo
   console.log('factory instance OK', factoryDeployment.contractAddress);
   let owner = await factory.owner();
   console.log('owner', owner);
-  summary = {
-    contractType : taskArgs["contracttype"],
-    version: taskArgs["deploymentversion"],
-    deployment: taskArgs['deploymentname'],
-    tokenName: taskArgs['tokenname'],
-    tokenSymbol: taskArgs['tokensymbol'],
-    network: chain
-  };
-  //uploadIPFS  data
-  //summary = await uploadRandomWorldsNFTs(summary);
   summary = await handleIpfsDeploymentData(summary);
   console.log(summary);
   //deployCollection
@@ -201,7 +217,7 @@ task('factory-deploy-rw-collection', 'Deploys an ImmutableCollection contract fo
   await factory.deployCollection(summary.tokenName, summary.tokenSymbol, summary.logoImgEndpoint, summary.collectionName, summary.collectionDescription, summary.maxMints, summary.defaultWeiPrice);
   console.log('-- tx done --')
   console.log('-- awaiting for tx --')
-  let maxSeconds = summary.network.trim() === 'localhost' ? 5 : 30;
+  let maxSeconds = summary.network.trim() === 'localhost' ? 1 : 10;
   for(let seconds = 0; seconds< maxSeconds; seconds++){
     await sleep(1000);
     console.log(`awaited ${seconds + 1} seconds...`);
@@ -210,28 +226,32 @@ task('factory-deploy-rw-collection', 'Deploys an ImmutableCollection contract fo
   let deployedCollections = await factory.getCatalogue();
   console.log('deployedCatalogue', deployedCollections);
   
-  let deployedSummary = deployedCollections.slice(-1)[0];
-  if(!deployedSummary){
+  let deployedAddress = deployedCollections.slice(-1)[0];
+  if(!deployedAddress){
     console.log('-- ERROR :: No summary found for the deployed collection among the retrieved factory summaries');
     return;
   }
-  console.log('current collection', deployedSummary);
-  console.log(deployedSummary.name);
-  console.log(deployedSummary.contractAddress);
-  let collection = new hre.ethers.Contract(deployedSummary.contractAddress, collectionABI, signers[0]);
-  const colName = await collection.name();
-  const colSymbol = await collection.symbol();
+  console.log('current collection', deployedAddress);
+
+  //getCollectionSummary() => llamar a todas las funciones por separado y devolver objeto
+  let collection = new hre.ethers.Contract(deployedAddress, collectionABI, signers[0]);
+  let collectionData = await getImmutableCollectionSummary(collection);
+  console.log('-- DEPLOYED COL DATA --', collectionData);
+  if(!collectionData){
+    console.log('-- failed to retrieve the contract summary data --');
+    return;
+  }
   // // address of col
   // // instance of col (address, ABI, signer)
-  console.log(`Deployed collection NAME / SYMBOL : ${colName} / ${colSymbol}`);
-  if(colName && colSymbol){
+  console.log(`Deployed collection NAME / SYMBOL : ${collectionData.tokenName} / ${collectionData.symbol}`);
+  if(collectionData.tokenName && collectionData.symbol){
     summary = {
       ...summary,
       factoryAddress: factoryDeployment.contractAddress,
-      contractAddress: deployedSummary.contractAddress,
+      contractAddress: deployedAddress,
       contractOwner: signers[0].address,
-      tokenName: colName,
-      tokenSymbol: colSymbol,
+      tokenName: collectionData.tokenName,
+      tokenSymbol: collectionData.symbol,
       abi: collectionABI
     }
 
@@ -245,6 +265,10 @@ task('factory-deploy-rw-collection', 'Deploys an ImmutableCollection contract fo
     }
     try{
       if(modelsMeta.length > 0){ 
+        console.log('-- setting IPFS data --');
+        await collection.setIpfsData(summary.nftMetadata.imagesCid, summary.nftMetadata.metaCid, IPFS_GW);
+        await sleep(1000);
+        deploymentStatus.ipfsDataSet = true;
         let chainData = []
         for(let i = 0; i < modelsMeta.length; i++){
           let item = modelsMeta[i];
@@ -264,41 +288,45 @@ task('factory-deploy-rw-collection', 'Deploys an ImmutableCollection contract fo
         }
         console.log('-- DEPLOYED METADATA --', chainData);
         //setIpfsData
-        await collection.setIpfsData(summary.nftMetadata.imagesCid, summary.nftMetadata.metaCid, IPFS_GW);
-        await sleep(1000);
-        let contractSummary = await collection.getContractSummary();
-        console.log('-- retrieving updated contract data --', contractSummary);
-        if(contractSummary.modelsCid && contractSummary.metaCid){
-          deploymentStatus.ipfsDataSet = true;
-          console.log(`-- model / meta CIDs: ${contractSummary.modelsCid} / ${contractSummary.metaCid}`);
-          await collection.enableERC20("KAKA", KAKA_ADDRESS, 100, 3);
-          console.log("-- enabling KAKA token --")
-          await sleep(1000);
-          let kakaInfo = await collection.paymentTokens("KAKA");
-          if(kakaInfo.tokenContract !== KAKA_ADDRESS){
-            console.log('-- An error has occured while enabling the KAKA token');
-            return;
-          }
-          deploymentStatus.enabledTokens.push("KAKA");
-          console.log(`-- Enabling CRAP coin -- `);
-          await collection.enableERC20("CRAP", CRAP_ADDRESS, 1000, 18);
-          await sleep(1000);
-          let crapInfo = await collection.paymentTokens("CRAP");
-          if(crapInfo.tokenContract !== CRAP_ADDRESS){
-            console.log('-- An error has occured while enabling the CRAP token');
-            return;
-          }
-          deploymentStatus.enabledTokens.push("CRAP");
-          console.log('-- deployed contract address. happy path --', summary.contractAddress);  
-          summary = {
-            ...summary,
-            deploymentStatus
-          }
-          fs.outputJSONSync(path.join(__dirname, 'deployments', 'collections', `${summary.contractType}-v${summary.version}-${summary.deployment}-${summary.network}-summary.json`), summary);
-          console.log("-- Todo OK --");
-          return;
+        
+        let contractSummary = await getImmutableCollectionSummary();
+        summary = {
+          ...summary,
+          contractSummary,
+          deploymentStatus
         }
-        else console.log('ERROR :: Invalid IPFS data stored in contract');
+        console.log('-- retrieving updated contract data --', contractSummary);
+        // if(contractSummary.modelsCid && contractSummary.metaCid){
+        //   deploymentStatus.ipfsDataSet = true;
+        //   console.log(`-- model / meta CIDs: ${contractSummary.modelsCid} / ${contractSummary.metaCid}`);
+        //   await collection.enableERC20("KAKA", KAKA_ADDRESS, 100, 3);
+        //   console.log("-- enabling KAKA token --")
+        //   await sleep(1000);
+        //   let kakaInfo = await collection.paymentTokens("KAKA");
+        //   if(kakaInfo.tokenContract !== KAKA_ADDRESS){
+        //     console.log('-- An error has occured while enabling the KAKA token');
+        //     return;
+        //   }
+        //   deploymentStatus.enabledTokens.push("KAKA");
+        //   console.log(`-- Enabling CRAP coin -- `);
+        //   await collection.enableERC20("CRAP", CRAP_ADDRESS, 1000, 18);
+        //   await sleep(1000);
+        //   let crapInfo = await collection.paymentTokens("CRAP");
+        //   if(crapInfo.tokenContract !== CRAP_ADDRESS){
+        //     console.log('-- An error has occured while enabling the CRAP token');
+        //     return;
+        //   }
+        //   deploymentStatus.enabledTokens.push("CRAP");
+        //   console.log('-- deployed contract address. happy path --', summary.contractAddress);  
+        //   summary = {
+        //     ...summary,
+        //     deploymentStatus
+        //   }
+        //   fs.outputJSONSync(path.join(__dirname, 'deployments', 'collections', `${summary.contractType}-v${summary.version}-${summary.deployment}-${summary.network}-summary.json`), summary);
+        //   console.log("-- Todo OK --");
+        //   return;
+        // }
+        // else console.log('ERROR :: Invalid IPFS data stored in contract');
       }
       else console.log('ERROR :: No NFT metadata found in summary')
     }
@@ -313,7 +341,7 @@ task('factory-deploy-rw-collection', 'Deploys an ImmutableCollection contract fo
   else console.log('An error has occured with the deployed contract. No deployed collection data found.')
 
   console.log('-- deployed collection summary with metadata | token enabling problems --', summary);
-  fs.outputJSONSync(path.join(__dirname, 'deployments', 'collections', `${summary.contractType}-v${summary.version}-${summary.deployment}-${summary.network}-summary.json`), summary);
+  fs.outputJSONSync(path.join(deploymentsRoot, 'collections', `${summary.contractType}-v${summary.version}-${summary.deployment}-${summary.network}-summary.json`), summary);
 
 })
 
@@ -509,3 +537,35 @@ task('mint-rw-character', 'Mints a Character NFT for a RandomWorlds deployment u
     break;
   }
 })
+
+async function getImmutableCollectionSummary(collection){
+  let tokenName = await collection.name();
+  let symbol = await collection.symbol();
+  let imagesCid = await collection.modelsFolderCID();
+  let metadataCid = await collection.metadataFolderCID()
+  let description = await collection.collectionDescription();
+  let name = await collection.collectionName();
+  let endpoint = await collection.endpoint();
+  let logoEndpoint = await collection.logoEndpoint();
+  let isLimited = await collection.isLimited();
+  let maxMints = await collection.maxMints();
+  let currentTokenId = await collection.tokenId();
+  let isOutOfStock = await collection.isOutOfStock();
+  let defaultWeiPrice = await collection.defaultWeiPrice();
+  let models = await collection.models();
+  let enabledTokens = await collection.getEnabledTokens();
+  return {
+    tokenName: tokenName,
+    symbol: symbol,
+    name: name,
+    description: description,
+    imagesCid: imagesCid,
+    metadataCid: metadataCid,
+    endpoint: endpoint,
+    logoEndpoint: logoEndpoint,
+    isOutOfStock: isOutOfStock,
+    defaultWeiPrice: defaultWeiPrice,
+    models: models,
+    enabledTokens: enabledTokens
+  }
+};

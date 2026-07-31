@@ -38,7 +38,7 @@ contract ImmutableCollection is LockableCharacter {
     uint256 public maxMints;
     bool public isLimited;
     string public logoEndpoint;
-    string[] private models;
+    string[] private _models;
     mapping(string => ModelMetadata) modelsMetadata;
     string public modelsFolderCID;
     string public metadataFolderCID;
@@ -46,20 +46,25 @@ contract ImmutableCollection is LockableCharacter {
     // Base URI required to interact with IPFS
     string private _baseURIExtended;
     string public collectionDescription;
-    string private collectionName;
+    string public collectionName;
     bool public isOutOfStock;
     uint256 public defaultWeiPrice;
     mapping(string => TokenDetails) public paymentTokens;
     string[] private _enabledTokens;
 
+    function models() external view returns (string[] memory){
+        return _models;
+    }
+
     function modelInfo(string memory fileName) external view returns(ModelMetadata memory){
         require(bytes(modelsMetadata[fileName].name).length > 0); 
         return modelsMetadata[fileName];
     }
+   
     function getEnabledTokens() external view returns(string[] memory){
         return _enabledTokens;
     }
-    
+
     function enableERC20(string memory symbol, address tokenContract, uint256 multiplier, uint8 decimals)  external onlyOwner {
         paymentTokens[symbol] = TokenDetails({
             tokenContract: tokenContract,
@@ -118,7 +123,7 @@ contract ImmutableCollection is LockableCharacter {
             data.maxMints = maxmints;
         }
         modelsMetadata[fileName] = data;
-        models.push(fileName);
+        _models.push(fileName);
         
     }
 
@@ -159,7 +164,7 @@ contract ImmutableCollection is LockableCharacter {
 
     // Allows minting of a new NFT 
     function _mintNFT(address collector, string memory model) private{
-        require(models.length > 0);
+        require(_models.length > 0);
         require(bytes(modelsFolderCID).length > 0);
         require(bytes(metadataFolderCID).length > 0);
         require(bytes(endpoint).length > 0);

@@ -5,9 +5,9 @@ Hardhat project to handle IPFS data &amp; deploy smart contracts for RandomWorld
 
 npx hardhat upload-randomworlds-collection --contracttype ImmutableCollection --deploymentname RandomWorlds-Season_1 --deploymentversion 0.0.1 --metaoverride false
 
-npx hardhat --network localhost deploy-immutable-set --deploymentname RandomWorlds --contractversion 0.0.1
+npx hardhat --network localhost deploy-immutable-set --deploymentoptname RandomWorlds-Season_1 --contractversion 0.0.1
 
-npx hardhat --network localhost factory-deploy-rw-collection --contracttype ImmutableCollection --deploymentversion 0.0.1 --factorydeployment ImmutableContracts-RandomWorlds-v0.0.1 --deploymentname RandomWorlds-Season1 --tokenname RandomWorldsHardHat --tokensymbol RNDS1
+npx hardhat --network localhost factory-deploy-rw-collection --contracttype ImmutableCollection --deploymentversion 0.0.1 --factorydeployment ImmutableContracts-RandomWorlds-v0.0.1 --deploymentname RandomWorlds-Season_1 --tokenname RandomWorldsHardHat --tokensymbol RNDS1
 
 npx hardhat --network localhost mint-rw-character --deploymentname RandomWorlds-Season1 --deploymentversion 0.0.1 --modelname Abigail_Williams --paymenttoken ETH --recieveraddress 0xee6870759cbDdFb12EE3A4547C35FFB667717df4
 
