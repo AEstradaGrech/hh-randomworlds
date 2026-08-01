@@ -19,3 +19,7 @@ npx hardhat --network sepolia set-deployment-ipfs-data --deploymentname RandomWo
 npx hardhat --network sepolia enable-deployment-token --deploymentname RandomWorlds-Season1 --deploymentversion 0.0.1 --tokenname KAKA --tokenaddress 0x7cb5238CfeFCe6a95A6542410Ac0BBcfc6BEB22B --multiplier 100 --tokendecimals 3
 
 npx hardhat --network sepolia enable-deployment-token --deploymentname RandomWorlds-Season1 --deploymentversion 0.0.1 --tokenname CRAP --tokenaddress 0xEC39263F60cb5AEfC8E4E4f36Fd9A7F50C1bD948 --multiplier 1000 --tokendecimals 18
+
+
+---------- custom chars --------------
+npx hardhat deploy-custom-chars-set --network localhost --tokenname ImmutableRandomCharacters --symbol RCHARS_T --weiprice 1000000000000000 --maxmints 0 --contractversion 0.0.1

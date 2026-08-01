@@ -9,7 +9,8 @@ const IPFS_GW = vars.get("IPFS_GW");
 
 require('./deployments/tasks/deployImmutable.js');
 require('./deployments/tasks/setupIPFSCollection.js');
-require('./deployments/tasks/deploySoftToken.js')
+require('./deployments/tasks/deploySoftToken.js');
+require('./deployments/tasks/deployCustomCharacters.js');
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {

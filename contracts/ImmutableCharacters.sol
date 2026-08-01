@@ -1,117 +1,182 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.34;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import {Ownable2Step, Ownable} from "@openzeppelin/contracts/access/Ownable2Step.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";                     // NEW
+import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol"; // NEW
 
-// Custom RandomWorlds charaters
-contract ImmutableCharacters is ERC721URIStorage
-{
-    constructor(address ownerAddress, string memory tokenName, string memory symbol, uint256 mintPrice, uint256 allowedMints)
-    ERC721(tokenName, symbol)
-    {
-        owner = ownerAddress;
+/// @notice Minimal view of the non-transferable soft token (WORDS).
+///         It can only be BURNED — it cannot be transferred into this contract —
+///         so a shard purchase is a sink, never revenue.
+interface IWords {
+    function burnFrom(address account, uint256 amount) external;
+}
+
+/// @title ImmutableCharacters
+/// @notice Character collection. Redeem credits are bought with ETH (revenue)
+///         or by burning soft tokens (a sink). A credit is minted into an NFT
+///         only against a tokenURI signed by the backend, so a caller cannot
+///         redeem metadata the backend never generated.
+contract ImmutableCharacters is ERC721URIStorage, Ownable2Step, ReentrancyGuard {
+    using ECDSA for bytes32;                 // NEW
+    using MessageHashUtils for bytes32;      // NEW
+
+    // ------------------------------------------------------------- config
+    string  private _baseURIExtended;
+    uint256 public  weiMintPrice;   // character price in ETH (wei)
+    uint256 public  maxMints;       // 0 = unlimited
+    bool    public  isAvailable;
+
+    /// @notice soft token accepted for WORD purchases (address(0) = disabled)
+    IWords public wordsToken;
+    /// @notice WORD base units required per 1 ETH of weiMintPrice.
+    uint256 public wordsExchangeRate;
+
+    /// @notice backend key whose signature authorises a tokenURI for redemption // NEW
+    address public signer;                                                        // NEW
+
+    // -------------------------------------------------------------- state
+    uint256 private _tokenId;
+    mapping(address => uint256) private _purchases;      // redeem credits
+    mapping(bytes32 => bool)    public  redeemed;        // NEW: spent tickets
+
+    // ------------------------------------------------------------- events
+    event PurchasedWithEther(address indexed buyer, uint256 price);
+    event PurchasedWithWords(address indexed buyer, uint256 shardsBurned);
+    event Redeemed(address indexed buyer, uint256 indexed tokenId, string uri);
+    event MintPriceUpdated(uint256 weiPrice);
+    event WordConfigUpdated(address token, uint256 exchangeRate);
+    event SignerUpdated(address signer);                 // NEW
+    event Withdrawn(address indexed to, uint256 amount);
+
+    // ------------------------------------------------------------- errors
+    error SoldOut();
+    error WrongEtherAmount();
+    error WordsDisabled();
+    error NoPurchases();
+    error EmptyURI();
+    error BadSignature();       // NEW
+    error TicketUsed();         // NEW
+    error TransferFailed();
+
+    constructor(
+        address ownerAddress,
+        string memory tokenName,
+        string memory symbol,
+        uint256 mintPrice,
+        uint256 allowedMints
+    ) ERC721(tokenName, symbol) Ownable(ownerAddress) {
+        weiMintPrice = mintPrice;
         maxMints = allowedMints;
         isAvailable = true;
-        weiMintPrice = mintPrice;
         _baseURIExtended = "ipfs://";
     }
 
-    struct TokenDetails {
-        address tokenContract;
-        uint256 multiplier;
-        uint8 decimals;
-    }
-
-    address public owner;
-    string private _baseURIExtended;
-    mapping(string => TokenDetails) public paymentTokens;
-    string[] private _enabledTokens;
-    uint256 private _tokenId;
-    uint256 public weiMintPrice;
-    bool public isAvailable;
-    uint256 public maxMints;
-    mapping(address => uint256) _purchases;
-
-    function resetBaseURI(string memory newUri) external {
-        require(msg.sender == owner, "Restricted to owner");
-        require(bytes(newUri).length > 0, "New value is empty");
+    // -------------------------------------------------------------- admin
+    function resetBaseURI(string calldata newUri) external onlyOwner {
+        if (bytes(newUri).length == 0) revert EmptyURI();
         _baseURIExtended = newUri;
     }
-    // Overrides the default function to enable ERC721URIStorage to get the updated baseURI
+
+    function setMintPrice(uint256 weiPrice) external onlyOwner {
+        weiMintPrice = weiPrice;
+        emit MintPriceUpdated(weiPrice);
+    }
+
+    function setAvailable(bool available) external onlyOwner {
+        isAvailable = available;
+    }
+
+    function setWordsConfig(address token, uint256 exchangeRate) external onlyOwner {
+        wordsToken = IWords(token);
+        wordsExchangeRate = exchangeRate;
+        emit WordConfigUpdated(token, exchangeRate);
+    }
+
+    /// @notice Set the backend key that signs redeemable tokenURIs.       // NEW
+    function setSigner(address newSigner) external onlyOwner {             // NEW
+        signer = newSigner;                                                // NEW
+        emit SignerUpdated(newSigner);                                     // NEW
+    }                                                                      // NEW
+
+    // ---------------------------------------------------------- purchasing
+    function etherPurchase() external payable {
+        if (!isAvailable) revert SoldOut();
+        if (msg.value != weiMintPrice) revert WrongEtherAmount();
+        _purchases[msg.sender]++;
+        emit PurchasedWithEther(msg.sender, msg.value);
+    }
+
+    /// @notice Buy a redeem credit by burning soft tokens. Caller must first
+    ///         approve this contract (or sign an ERC20Permit) for shardPrice().
+    function wordsPurchase() external nonReentrant {
+        if (!isAvailable) revert SoldOut();
+        if (address(wordsToken) == address(0)) revert WordsDisabled();
+
+        uint256 cost = wordPrice();
+        _purchases[msg.sender]++;               // effect before interaction
+        wordsToken.burnFrom(msg.sender, cost);  // reverts if allowance/balance short
+        emit PurchasedWithWords(msg.sender, cost);
+    }
+
+    /**
+     * @notice Redeem a paid credit into an NFT, using a tokenURI the backend
+     *         produced and signed after the IPFS upload succeeded.
+     * @dev The signature binds the URI to (this contract, chain, caller), so a
+     *      ticket cannot be replayed on another collection, chain, or by another
+     *      user; `redeemed` stops the same ticket being used twice.
+     */
+    function redeemNFT(string calldata metadataUri, bytes calldata signature) external { // CHANGED
+        if (_purchases[msg.sender] == 0) revert NoPurchases();
+        if (bytes(metadataUri).length == 0) revert EmptyURI();
+
+        bytes32 digest = keccak256(                                                       // NEW
+            abi.encode(address(this), block.chainid, msg.sender, keccak256(bytes(metadataUri)))
+        ).toEthSignedMessageHash();
+
+        if (redeemed[digest]) revert TicketUsed();                                        // NEW
+        if (digest.recover(signature) != signer) revert BadSignature();                   // NEW
+
+        redeemed[digest] = true;                                                          // NEW
+        _purchases[msg.sender]--;
+        _mintNFT(msg.sender, metadataUri);
+    }
+
+    // ---------------------------------------------------------- withdrawal
+    function withdraw(address to, uint256 amount) external onlyOwner nonReentrant {
+        (bool ok, ) = to.call{value: amount}("");
+        if (!ok) revert TransferFailed();
+        emit Withdrawn(to, amount);
+    }
+
+    // -------------------------------------------------------------- views
+    function wordPrice() public view returns (uint256) {
+        return (weiMintPrice * wordsExchangeRate) / 1 ether;
+    }
+
+    function availablePurchases() external view returns (uint256) {
+        return _purchases[msg.sender];
+    }
+
+    function totalMints() external view returns (uint256) {
+        return _tokenId;
+    }
+
+    // ------------------------------------------------------------ internal
     function _baseURI() internal view override returns (string memory) {
         return _baseURIExtended;
     }
 
-    function enabledTokens() external view returns (string[] memory){
-        return _enabledTokens;
-    }
-
-    function availablePurchases() external view returns (uint256){
-        return _purchases[msg.sender];
-    }
-    
-    function totalMints() external view returns (uint256) {
-        return _tokenId;
-    }
-    
-    function setMintPrice(uint256 weiPrice) external{
-        require(msg.sender == owner);
-        require(weiPrice > 0);
-        weiMintPrice = weiPrice;
-    }
-
-    function enableERC20(string memory symbol, address tokenContract, uint256 multiplier, uint8 decimals)  external {
-        require(msg.sender == owner);
-        paymentTokens[symbol] = TokenDetails({
-            tokenContract: tokenContract,
-            multiplier: multiplier,
-            decimals: decimals
-        });
-        _enabledTokens.push(symbol);
-    }
-
-    //1 - Purchase = mapping(address => uint256) = derechos de compra / redeem
-    //2 - Con derecho de compra guardado en contrato y acumulables (++ | --) subir img & meta a IPFS (no tiene deshacer)
-    //3 - Cuando termina la request de IPFS, se llama a redeem con metadataUri, y ya si se mintea oficialmente el token
-    function etherPurchase() external payable{
-        require(isAvailable, "Collection cannot mint more nfts");
-        require(msg.value >= weiMintPrice, "Not enough balance");
-        _purchases[msg.sender]++;
-    }
-
-    function customTokenPurchase(string memory paymentToken) external{
-        require(isAvailable, "Collection cannot mint more nfts");
-        require(keccak256(abi.encodePacked(paymentToken)) != keccak256(abi.encodePacked("ETH")), "Payment token is ETH");
-        uint256 price =  _fromWei(weiMintPrice, paymentToken);
-        require(paymentTokens[paymentToken].tokenContract != address(0), "Payment token contract address not found");
-        require(IERC20(paymentTokens[paymentToken].tokenContract).balanceOf(msg.sender) >= price, "Not enough balance");
-
-        IERC20(paymentTokens[paymentToken].tokenContract).transferFrom(msg.sender, payable(owner), price);
-        _purchases[msg.sender]++;
-    }
-
-    function redeemNFT(string memory metadataUri) external{
-        require(_purchases[msg.sender] > 0, "No purchases found for address");
-        _mintNFT(msg.sender, metadataUri);
-        _purchases[msg.sender]--;
-    }
-
-    function _mintNFT(address collector, string memory metadataUri) private
-    {
+    function _mintNFT(address collector, string memory metadataUri) private {
         _tokenId++;
         _safeMint(collector, _tokenId);
         _setTokenURI(_tokenId, metadataUri);
-        if(maxMints > 0 && _tokenId >= maxMints){
+        emit Redeemed(collector, _tokenId, metadataUri);
+        if (maxMints > 0 && _tokenId >= maxMints) {
             isAvailable = false;
         }
-    }
-
-    function _fromWei(uint256 weiValue, string memory tokenSymbol) private view returns (uint256){
-        uint256 price = weiValue * paymentTokens[tokenSymbol].multiplier;
-        if(paymentTokens[tokenSymbol].decimals == 18)
-            return price;
-        return  price / (10**(18-paymentTokens[tokenSymbol].decimals));
     }
 }

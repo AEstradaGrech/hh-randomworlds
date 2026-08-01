@@ -1,8 +1,8 @@
   const IPFS_GW = vars.get("IPFS_GW");
   const fs = require('fs-extra');
-  const deffs = require('fs')
+  const deffs = require('fs');
   const fsPromises = deffs.promises;
-  const path = require('path')
+  const path = require('path');
   
   //npx hardhat --network localhost deploy-immutable-set --deploymentoptname RandomWorlds --contractversion 0.0.1
   task('deploy-immutable-set', 'Deploys an ImmutableContracts Set locally or in sepolia, grouped by Collection name / topic, outputting the ABI for the ImmutableFactory contract and the ImmutableCollection that it instantiates')
