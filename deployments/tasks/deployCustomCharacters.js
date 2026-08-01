@@ -1,6 +1,5 @@
 const fs = require('fs-extra');
 const path = require('path');
-
 // npx hardhat deploy-custom-chars-set --network localhost --tokenname ImmutableRandomCharacters --symbol RCHARS_T --weiprice 1000000000000000 --maxmints 0 --contractversion 0.0.1
 task('deploy-custom-chars-set', 'Deploy a factory and a collection of custom chars')
 .addParam('tokenname')
@@ -84,9 +83,86 @@ task('deploy-custom-chars-set', 'Deploy a factory and a collection of custom cha
         ...summary,
         collectionAddress: currentCollection[0],
         factoryABI: factoryABI,
-        collectionABI: collectionArtifact.abi
+        collectionABI: collectionArtifact.abi,
+        totalCollections: factoryCollections.length
     }
     const deploymentsRoot = path.join(__dirname, '..');
+
+    fs.outputJSONSync(path.resolve(deploymentsRoot,'collections', `ImmutableCharactersSet-v${summary.version}-${summary.chain}.json`), summary);
+});
+
+// npx hardhat deploy-custom-chars-set --network localhost --tokenname ImmutableRandomCharacters --symbol RCHARS_T --weiprice 1000000000000000 --maxmints 0 --contractversion 0.0.1
+task('deploy-factory-chars-contract', 'Deploy ImmutableCharacters contract using the specified factory')
+.addParam('tokenname')
+.addParam('symbol')
+.addParam('weiprice')
+.addParam('maxmints')
+.addParam('contractversion')
+.setAction(async (taskArgs, args) => {
+    console.log('deploying Custom Immutable Characters set');
+    const signers = await hre.ethers.getSigners();
+    
+    let signer = signers[0];
+    
+    console.log(`-- signer: ${signer.address} --`);
+
+    summary = {
+        type: 'ImmutableCharacters',
+        version: taskArgs['contractversion'],
+        chain: args.network.name,
+        owner: signer.address,
+        tokenName: taskArgs['tokenname'],
+        symbol: taskArgs['symbol'],
+        weiPrice: taskArgs['weiprice'],
+        maxMints: taskArgs['maxmints'],
+        isLimited: false
+    }
+    
+    summary.isLimited = summary.maxMints > 0;
+    
+    console.log(summary);
+
+    const deploymentsRoot = path.join(__dirname, '..');
+
+    const factoryDeployment = require(path.resolve(deploymentsRoot, 'collections', `ImmutableCharactersSet-v${summary.version}-${summary.chain}.json`));
+
+    const { factoryAddress, factoryABI, collectionABI } = factoryDeployment;
+
+    const factory = new hre.ethers.Contract(factoryAddress, factoryABI, signer);
+
+    await factory.deployCollection(summary.tokenName, summary.symbol, parseInt(summary.weiPrice), parseInt(summary.maxMints))
+
+    let factoryCollections = await factory.getCatalogue();
+
+    console.log('-- factory catalogue --');
+    console.log(factoryCollections);
+
+    let currentCollection = factoryCollections.slice(-1)[0];
+
+    console.log(`-- collection address: ${currentCollection[0]} --`);
+
+    const collection = new hre.ethers.Contract(currentCollection[0], collectionABI, signer);
+
+    let deployedSymbol = await collection.symbol();
+
+    let deployedName = await collection.name();
+
+    let deployedPrice = await collection.weiMintPrice();
+
+    console.log(`-- SYMBOL: ${deployedSymbol} --`);
+    
+    console.log(`-- NAME: ${deployedName} --`);
+    
+    console.log(`-- PRICE: ${deployedPrice} --`);
+
+
+    summary = {
+        ...summary,
+        collectionAddress: currentCollection[0],
+        factoryABI: factoryABI,
+        collectionABI: collectionABI,
+        totalCollections: factoryCollections.length
+    }
 
     fs.outputJSONSync(path.resolve(deploymentsRoot,'collections', `ImmutableCharactersSet-v${summary.version}-${summary.chain}.json`), summary);
 });

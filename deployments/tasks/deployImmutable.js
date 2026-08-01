@@ -351,7 +351,8 @@ task('set-deployment-models', 'Sets the collection models data for a given deplo
 .setAction(async (taskArgs, args) =>{
   console.log(`Setting models for deployment: ${taskArgs['deploymentname']}...`);
   let chain = args.network.name;
-  let deploymentSummary = require(path.resolve(__dirname, `deployments/collections/ImmutableCollection-v${taskArgs['deploymentversion']}-${taskArgs['deploymentname']}-${chain}-summary.json`));
+  const deploymentsRoot = path.join(__dirname, '..');
+  let deploymentSummary = require(path.resolve(deploymentsRoot, `collections/ImmutableCollection-v${taskArgs['deploymentversion']}-${taskArgs['deploymentname']}-${chain}-summary.json`));
   const { abi, contractOwner, contractAddress, nftMetadata} = deploymentSummary;
   //getDeploymentInstance
   const signers = await hre.ethers.getSigners();

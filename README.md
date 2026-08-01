@@ -23,3 +23,5 @@ npx hardhat --network sepolia enable-deployment-token --deploymentname RandomWor
 
 ---------- custom chars --------------
 npx hardhat deploy-custom-chars-set --network localhost --tokenname ImmutableRandomCharacters --symbol RCHARS_T --weiprice 1000000000000000 --maxmints 0 --contractversion 0.0.1
+
+npx hardhat deploy-factory-chars-contract --network localhost --tokenname ImmutableRandomCharacters --symbol RCHARS_T --weiprice 1000000000000000 --maxmints 0 --contractversion 0.0.1
