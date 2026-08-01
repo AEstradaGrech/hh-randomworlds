@@ -24,4 +24,8 @@ npx hardhat --network sepolia enable-deployment-token --deploymentname RandomWor
 ---------- custom chars --------------
 npx hardhat deploy-custom-chars-set --network localhost --tokenname ImmutableRandomCharacters --symbol RCHARS_T --weiprice 1000000000000000 --maxmints 0 --contractversion 0.0.1
 
-npx hardhat deploy-factory-chars-contract --network localhost --tokenname ImmutableRandomCharacters --symbol RCHARS_T --weiprice 1000000000000000 --maxmints 0 --contractversion 0.0.1
+npx hardhat deploy-factory-chars-contract --network localhost --tokenname ImmutableRandomCharacters --symbol RCHARS_T --weiprice 1000000000000000 --maxmints 0 
+--contractversion 0.0.1
+
+-------------------- game sessions --------------
+npx hardhat deploy-game-session --network localhost --deploymentname ImmutableRandomQuests --entryfee 1000000000000000 --winmultiplier 1 --recoverycooldown 1 --sessiontimeout 1 --contractversion 0.0.1

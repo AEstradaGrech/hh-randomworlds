@@ -11,6 +11,7 @@ require('./deployments/tasks/deployImmutable.js');
 require('./deployments/tasks/setupIPFSCollection.js');
 require('./deployments/tasks/deploySoftToken.js');
 require('./deployments/tasks/deployCustomCharacters.js');
+require('./deployments/tasks/deployGameSession.js');
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {

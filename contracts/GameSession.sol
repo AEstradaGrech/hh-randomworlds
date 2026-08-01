@@ -81,8 +81,12 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
     error NothingToWithdraw();
     error TransferFailed();
 
-    constructor(address owner_, address gameSigner_) Ownable(owner_) {
+    constructor(address owner_, address gameSigner_, uint256 gameFee_, uint16 winMultiplier_, uint64 recoveryCooldown_, uint64 sessionTimeout_) Ownable(owner_) {
         gameSigner = gameSigner_;
+        entryFee = gameFee_;
+        winMultiplierBps = winMultiplier_;
+        recoveryCooldown = recoveryCooldown_;
+        sessionTimeout = sessionTimeout_;
     }
 
     // -------------------------------------------------------------- admin
