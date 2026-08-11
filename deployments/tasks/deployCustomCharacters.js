@@ -158,6 +158,7 @@ task('deploy-factory-chars-contract', 'Deploy ImmutableCharacters contract using
 
     summary = {
         ...summary,
+        factoryAddress: factoryAddress,
         collectionAddress: currentCollection[0],
         factoryABI: factoryABI,
         collectionABI: collectionABI,

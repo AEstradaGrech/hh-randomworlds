@@ -1,108 +1,45 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.34;
 
-import {ERC721URIStorage} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {Ownable2Step, Ownable} from "@openzeppelin/contracts/access/Ownable2Step.sol";
-import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";                     // NEW
-import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol"; // NEW
+import {LockableCharacter} from "./LockableCharacter.sol";
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
 
-/// @notice Minimal view of the non-transferable soft token (WORDS).
-///         It can only be BURNED — it cannot be transferred into this contract —
-///         so a shard purchase is a sink, never revenue.
-interface IWords {
-    function burnFrom(address account, uint256 amount) external;
-}
+/// @notice Unique, per-user characters. A paid credit (ETH or WORDS) becomes an
+///         NFT only against a backend-signed tokenURI.
+contract ImmutableCharacters is LockableCharacter {
+    using ECDSA for bytes32;
+    using MessageHashUtils for bytes32;
 
-/// @title ImmutableCharacters
-/// @notice Character collection. Redeem credits are bought with ETH (revenue)
-///         or by burning soft tokens (a sink). A credit is minted into an NFT
-///         only against a tokenURI signed by the backend, so a caller cannot
-///         redeem metadata the backend never generated.
-contract ImmutableCharacters is ERC721URIStorage, Ownable2Step, ReentrancyGuard {
-    using ECDSA for bytes32;                 // NEW
-    using MessageHashUtils for bytes32;      // NEW
+    uint256 public weiMintPrice;
+    uint256 public maxMints;   // 0 = unlimited
+    bool    public isAvailable;
+    address public signer;     // backend key authorising tokenURIs
 
-    // ------------------------------------------------------------- config
-    string  private _baseURIExtended;
-    uint256 public  weiMintPrice;   // character price in ETH (wei)
-    uint256 public  maxMints;       // 0 = unlimited
-    bool    public  isAvailable;
-
-    /// @notice soft token accepted for WORD purchases (address(0) = disabled)
-    IWords public wordsToken;
-    /// @notice WORD base units required per 1 ETH of weiMintPrice.
-    uint256 public wordsExchangeRate;
-
-    /// @notice backend key whose signature authorises a tokenURI for redemption // NEW
-    address public signer;                                                        // NEW
-
-    // -------------------------------------------------------------- state
     uint256 private _tokenId;
-    mapping(address => uint256) private _purchases;      // redeem credits
-    mapping(bytes32 => bool)    public  redeemed;        // NEW: spent tickets
+    mapping(address => uint256) private _purchases;
+    mapping(bytes32 => bool)    public  redeemed;
 
-    // ------------------------------------------------------------- events
     event PurchasedWithEther(address indexed buyer, uint256 price);
-    event PurchasedWithWords(address indexed buyer, uint256 shardsBurned);
+    event PurchasedWithWords(address indexed buyer, uint256 burned);
     event Redeemed(address indexed buyer, uint256 indexed tokenId, string uri);
     event MintPriceUpdated(uint256 weiPrice);
-    event WordConfigUpdated(address token, uint256 exchangeRate);
-    event SignerUpdated(address signer);                 // NEW
-    event Withdrawn(address indexed to, uint256 amount);
+    event SignerUpdated(address signer);
 
-    // ------------------------------------------------------------- errors
-    error SoldOut();
-    error WrongEtherAmount();
-    error WordsDisabled();
-    error NoPurchases();
-    error EmptyURI();
-    error BadSignature();       // NEW
-    error TicketUsed();         // NEW
-    error TransferFailed();
+    error SoldOut(); error WrongEtherAmount(); error NoPurchases();
+    error EmptyURI(); error BadSignature(); error TicketUsed();
 
-    constructor(
-        address ownerAddress,
-        string memory tokenName,
-        string memory symbol,
-        uint256 mintPrice,
-        uint256 allowedMints
-    ) ERC721(tokenName, symbol) Ownable(ownerAddress) {
-        weiMintPrice = mintPrice;
-        maxMints = allowedMints;
-        isAvailable = true;
-        _baseURIExtended = "ipfs://";
+    constructor(address owner_, string memory name_, string memory symbol_,
+                uint256 mintPrice, uint256 allowedMints)
+        LockableCharacter(owner_, name_, symbol_)
+    {
+        weiMintPrice = mintPrice; maxMints = allowedMints; isAvailable = true;
     }
 
-    // -------------------------------------------------------------- admin
-    function resetBaseURI(string calldata newUri) external onlyOwner {
-        if (bytes(newUri).length == 0) revert EmptyURI();
-        _baseURIExtended = newUri;
-    }
+    function setMintPrice(uint256 p) external onlyOwner { weiMintPrice = p; emit MintPriceUpdated(p); }
+    function setAvailable(bool a) external onlyOwner { isAvailable = a; }
+    function setSigner(address s) external onlyOwner { signer = s; emit SignerUpdated(s); }
 
-    function setMintPrice(uint256 weiPrice) external onlyOwner {
-        weiMintPrice = weiPrice;
-        emit MintPriceUpdated(weiPrice);
-    }
-
-    function setAvailable(bool available) external onlyOwner {
-        isAvailable = available;
-    }
-
-    function setWordsConfig(address token, uint256 exchangeRate) external onlyOwner {
-        wordsToken = IWords(token);
-        wordsExchangeRate = exchangeRate;
-        emit WordConfigUpdated(token, exchangeRate);
-    }
-
-    /// @notice Set the backend key that signs redeemable tokenURIs.       // NEW
-    function setSigner(address newSigner) external onlyOwner {             // NEW
-        signer = newSigner;                                                // NEW
-        emit SignerUpdated(newSigner);                                     // NEW
-    }                                                                      // NEW
-
-    // ---------------------------------------------------------- purchasing
     function etherPurchase() external payable {
         if (!isAvailable) revert SoldOut();
         if (msg.value != weiMintPrice) revert WrongEtherAmount();
@@ -110,73 +47,33 @@ contract ImmutableCharacters is ERC721URIStorage, Ownable2Step, ReentrancyGuard 
         emit PurchasedWithEther(msg.sender, msg.value);
     }
 
-    /// @notice Buy a redeem credit by burning soft tokens. Caller must first
-    ///         approve this contract (or sign an ERC20Permit) for shardPrice().
-    function wordsPurchase() external nonReentrant {
+    /// @notice Buy a credit by burning WORDS; (deadline,v,r,s) is the ERC-2612 permit.
+    function wordsPurchase(uint256 deadline, uint8 v, bytes32 r, bytes32 s) external {
         if (!isAvailable) revert SoldOut();
-        if (address(wordsToken) == address(0)) revert WordsDisabled();
-
-        uint256 cost = wordPrice();
-        _purchases[msg.sender]++;               // effect before interaction
-        wordsToken.burnFrom(msg.sender, cost);  // reverts if allowance/balance short
+        uint256 cost = wordsPrice(weiMintPrice);
+        _purchases[msg.sender]++;
+        _collectWords(msg.sender, cost, deadline, v, r, s);
         emit PurchasedWithWords(msg.sender, cost);
     }
 
-    /**
-     * @notice Redeem a paid credit into an NFT, using a tokenURI the backend
-     *         produced and signed after the IPFS upload succeeded.
-     * @dev The signature binds the URI to (this contract, chain, caller), so a
-     *      ticket cannot be replayed on another collection, chain, or by another
-     *      user; `redeemed` stops the same ticket being used twice.
-     */
-    function redeemNFT(string calldata metadataUri, bytes calldata signature) external { // CHANGED
+    function redeemNFT(string calldata metadataUri, bytes calldata signature) external {
         if (_purchases[msg.sender] == 0) revert NoPurchases();
         if (bytes(metadataUri).length == 0) revert EmptyURI();
-
-        bytes32 digest = keccak256(                                                       // NEW
+        bytes32 digest = keccak256(
             abi.encode(address(this), block.chainid, msg.sender, keccak256(bytes(metadataUri)))
         ).toEthSignedMessageHash();
+        if (redeemed[digest]) revert TicketUsed();
+        if (digest.recover(signature) != signer) revert BadSignature();
 
-        if (redeemed[digest]) revert TicketUsed();                                        // NEW
-        if (digest.recover(signature) != signer) revert BadSignature();                   // NEW
-
-        redeemed[digest] = true;                                                          // NEW
+        redeemed[digest] = true;
         _purchases[msg.sender]--;
-        _mintNFT(msg.sender, metadataUri);
-    }
-
-    // ---------------------------------------------------------- withdrawal
-    function withdraw(address to, uint256 amount) external onlyOwner nonReentrant {
-        (bool ok, ) = to.call{value: amount}("");
-        if (!ok) revert TransferFailed();
-        emit Withdrawn(to, amount);
-    }
-
-    // -------------------------------------------------------------- views
-    function wordPrice() public view returns (uint256) {
-        return (weiMintPrice * wordsExchangeRate) / 1 ether;
-    }
-
-    function availablePurchases() external view returns (uint256) {
-        return _purchases[msg.sender];
-    }
-
-    function totalMints() external view returns (uint256) {
-        return _tokenId;
-    }
-
-    // ------------------------------------------------------------ internal
-    function _baseURI() internal view override returns (string memory) {
-        return _baseURIExtended;
-    }
-
-    function _mintNFT(address collector, string memory metadataUri) private {
         _tokenId++;
-        _safeMint(collector, _tokenId);
+        _safeMint(msg.sender, _tokenId);
         _setTokenURI(_tokenId, metadataUri);
-        emit Redeemed(collector, _tokenId, metadataUri);
-        if (maxMints > 0 && _tokenId >= maxMints) {
-            isAvailable = false;
-        }
+        emit Redeemed(msg.sender, _tokenId, metadataUri);
+        if (maxMints > 0 && _tokenId >= maxMints) isAvailable = false;
     }
+
+    function availablePurchases() external view returns (uint256) { return _purchases[msg.sender]; }
+    function totalMints() external view returns (uint256) { return _tokenId; }
 }

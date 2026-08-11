@@ -2,7 +2,7 @@ const GAME_SIGNER_ADDRESS = vars.get('GAME_SIGNER_ADDRESS');
 const fs = require('fs-extra');
 const path = require('path');
 
-//npx hardhat deploy-game-session --network localhost --deploymentname ImmutableRandomQuests --entryfee 1000000000000000 --winmultiplier 1 --recoverycooldown 1 --sessiontimeout 1 --contractversion 0.0.1
+//npx hardhat deploy-game-session --network localhost --deploymentname ImmutableRandomQuests --entryfee 1000000000000000 --winmultiplier 1 --recoverycooldown 1 --sessiontimeout 1 --contractversion 0.1.0
 task('deploy-game-session', 'Deploys a game session contract for the Quests Mode')
 .addParam('deploymentname')
 .addParam('contractversion')
@@ -16,8 +16,8 @@ task('deploy-game-session', 'Deploys a game session contract for the Quests Mode
     const DAY  = 24 * HOUR;
 
     // e.g. task takes cooldown in DAYS and timeout in HOURS
-    const recoveryCooldown = BigInt(taskArgs.recoverycooldown) * BigInt(DAY);   // 3  -> 259200
-    const sessionTimeout   = BigInt(taskArgs.sessiontimeout)   * BigInt(HOUR);  // 1  -> 3600
+    const recoveryCooldown = BigInt(taskArgs.recoverycooldown) * BigInt(60);   // 3  -> 259200
+    const sessionTimeout   = BigInt(taskArgs.sessiontimeout)   * BigInt(60);  // 1  -> 3600
 
     summary = {
         type: "GameSession",
@@ -25,8 +25,8 @@ task('deploy-game-session', 'Deploys a game session contract for the Quests Mode
         deploymentName: taskArgs['deploymentname'],
         entryFee: taskArgs['entryfee'],
         winMultiplier: taskArgs['winmultiplier'],
-        recoveryCooldown: `${taskArgs['recoverycooldown']} days. (${recoveryCooldown} seconds)`,
-        sessionTimeout: `${taskArgs['sessiontimeout']} hours. (${sessionTimeout} seconds)`,
+        recoveryCooldown: `${taskArgs['recoverycooldown']} mins. (${recoveryCooldown} seconds)`,
+        sessionTimeout: `${taskArgs['sessiontimeout']} mins. (${sessionTimeout} seconds)`,
         version: taskArgs['contractversion']
     }
     /*

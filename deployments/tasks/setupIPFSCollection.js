@@ -7,18 +7,16 @@ const path = require('path')
 const axios = require('axios');
 const CryptoJS = require("crypto-js");
 
-//npx hardhat upload-randomworlds-collection --contracttype ImmutableCollection --deploymentname RandomWorlds-Season_1 --deploymentversion 0.0.1 --metaoverride false
+//npx hardhat upload-randomworlds-collection --contracttype ImmutableCollection --deploymentname RandomWorlds-Season_1 --metaoverride false
 task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection models and metadata to IPFS via Pinata and saves the returned CIDs in the deployment summary file')
 .addParam('contracttype')
 .addParam('deploymentname')
-.addParam('deploymentversion')
 .addParam('metaoverride')
 .setAction(async (taskArgs, args) => {
   let isMetaOverride = taskArgs["metaoverride"] === 'true' ? true : false;
   console.log('-- is meta override --', isMetaOverride);
   let summary = {
     contractType : taskArgs['contracttype'],
-    version: taskArgs["deploymentversion"],
     deployment: taskArgs['deploymentname'],
   }
   console.log(`Importing images for the collection: ${summary.deployment}...`);
@@ -107,7 +105,7 @@ task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection mode
     console.log('is  override');
   let skipMetaUpload = false;
   if(isDuplicate === true && isMetaOverride === false){
-    let ipfsDeploymentData = require(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`));
+    let ipfsDeploymentData = require(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}.json`));
     if(ipfsDeploymentData){
       console.log('-- REUSING DEPLOYED COLLECTION METADATA -- ', ipfsDeploymentData.modelsMetadata.folderCid);
       summary = {
@@ -162,7 +160,7 @@ task('upload-randomworlds-collection', 'Uploads the RandomWorlds collection mode
       }
     }
   }
-  fs.outputJSONSync(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`), summary);
+  fs.outputJSONSync(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}.json`), summary);
 })
 
 async function streamToBuffer(stream) {

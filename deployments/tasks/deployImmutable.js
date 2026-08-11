@@ -71,7 +71,7 @@ async function handleIpfsDeploymentData(summary){
       console.log("metadata file for collection not found. Cancelling upload process");
       return;
   }
-  let ipfsDeployment = require(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}-v${summary.version}.json`));
+  let ipfsDeployment = require(path.join(deploymentsRoot, 'ipfs', `${summary.deployment}-${summary.contractType}.json`));
   if(!ipfsDeployment){
     console.log('-- failed to load the IPFS deployment data file. Cancelling deployment --');
     return;
@@ -289,7 +289,7 @@ if(!IPFS_GW ){
         console.log('-- DEPLOYED METADATA --', chainData);
         //setIpfsData
         
-        let contractSummary = await getImmutableCollectionSummary();
+        let contractSummary = await getImmutableCollectionSummary(collection);
         summary = {
           ...summary,
           contractSummary,
@@ -464,7 +464,8 @@ task('mint-rw-character', 'Mints a Character NFT for a RandomWorlds deployment u
     collector: taskArgs['recieveraddress'] 
   }
   console.log(`-- minting ${params.model} from ${params.deployment}-${params.version} (${params.network}) using ${params.token} for address: ${params.collector} --`);
-  let deploymentSummary = require(path.resolve(__dirname, `deployments/collections/ImmutableCollection-v${taskArgs['deploymentversion']}-${taskArgs['deploymentname']}-${chain}-summary.json`));
+  const deploymentsRoot = path.join(__dirname, '..');
+  let deploymentSummary = require(path.resolve(deploymentsRoot, `collections/ImmutableCollection-v${taskArgs['deploymentversion']}-${taskArgs['deploymentname']}-${chain}-summary.json`));
   console.log('-- deployment summary --', deploymentSummary);
   const { abi, contractOwner, contractAddress, nftMetadata} = deploymentSummary;
   //getDeploymentInstance
@@ -480,7 +481,7 @@ task('mint-rw-character', 'Mints a Character NFT for a RandomWorlds deployment u
     return;
   }
   let collection = new hre.ethers.Contract(contractAddress, abi, signer);
-  let totalMints = await collection.totalMints();
+  let totalMints = await collection.tokenId();
   let nextMintId = parseInt(totalMints) + 1;
   let ownerOf = '';
   switch(params.token){
@@ -563,8 +564,10 @@ async function getImmutableCollectionSummary(collection){
     metadataCid: metadataCid,
     endpoint: endpoint,
     logoEndpoint: logoEndpoint,
+    isLimited: isLimited,
+    maxMints: Number(maxMints),
     isOutOfStock: isOutOfStock,
-    defaultWeiPrice: defaultWeiPrice,
+    defaultWeiPrice: Number(defaultWeiPrice),
     models: models
   }
 };

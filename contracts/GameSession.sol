@@ -12,7 +12,11 @@ interface ILockableCharacter {
     function lock(uint256 tokenId, uint64 until) external;
     function unlock(uint256 tokenId) external;
 }
-
+/// @notice WORDS soft token as a collection sees it: soulbound (burn-only),
+///         with permit() so a buy skips the separate approve tx.
+interface IWords {
+    function mint(address to, uint256 amount) external;
+}
 /**
  * @title GameSession
  * @notice One deployment for the whole studio. Owns the session lifecycle,
@@ -39,10 +43,11 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
     }
 
     // ------------------------------------------------------------- config
-
+    IWords  public wordsToken;         // address(0) = WORDS disabled
     address public gameSigner;
     uint256 public entryFee            = 0.01 ether;
-    uint16  public winMultiplierBps    = 10_000;  // 150% of the wager on a win
+    uint256 public wordsReward         = 1 ether;
+    uint16  public winMultiplierBps    = 10_000;  // 100% of the wager on a win
     uint64  public recoveryCooldown    = 3 days;
     uint64  public sessionTimeout      = 7 days;  // anti-brick escape hatch
 
@@ -65,6 +70,9 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
     event GameSettled(bytes32 indexed key, address indexed player, Outcome outcome, uint256 payout);
     event GameAbandoned(bytes32 indexed key, address indexed player);
     event Withdrawn(address indexed player, uint256 amount);
+    event WordsRewarded(address indexed player, uint256 amount);
+    event WordsRewardFailed(address indexed player, uint256 amount);
+    event WordsConfigUpdated(address token, uint256 rewardPoints);
 
     // ------------------------------------------------------------- errors
 
@@ -96,11 +104,12 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
     function setWinMultiplierBps(uint16 b) external onlyOwner { winMultiplierBps = b; }
     function setRecoveryCooldown(uint64 c) external onlyOwner { recoveryCooldown = c; }
     function setSessionTimeout(uint64 t) external onlyOwner { sessionTimeout = t; }
-
-    function setCollection(address collection, bool allowed) external onlyOwner {
-        allowedCollections[collection] = allowed;
+    function setCollection(address collection, bool allowed) external onlyOwner { allowedCollections[collection] = allowed; }
+    function setWordsConfig(address token, uint256 rewardPoints) external onlyOwner {
+        wordsToken = IWords(token);
+        wordsReward = rewardPoints;
+        emit WordsConfigUpdated(token, rewardPoints);
     }
-
     /// @notice top up the prize float
     function fund() external payable {}
 
@@ -121,7 +130,7 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
         if (msg.value != entryFee) revert WrongFee();
         if (IERC721(collection).ownerOf(tokenId) != msg.sender) revert NotCharacterOwner();
 
-        bytes32 key = _key(collection, tokenId);
+        bytes32 key = getKey(collection, tokenId);
         if (sessions[key].player != address(0)) revert CharacterBusy();
         // a dead character is still locked; that lock is what enforces the cooldown
         if (ILockableCharacter(collection).locked(tokenId)) revert CharacterRecovering();
@@ -157,7 +166,7 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
     ) external nonReentrant {
         if (outcome == Outcome.NONE) revert BadOutcome();
 
-        bytes32 key = _key(collection, tokenId);
+        bytes32 key = getKey(collection, tokenId);
         Session memory s = sessions[key];
         if (s.player == address(0)) revert NoSession();
 
@@ -175,8 +184,10 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
             payout = maxPayout;
             pending[s.player] += payout;
             totalPending += payout;
+            _rewardWithWords(s.player, 5_000);
             ILockableCharacter(collection).unlock(tokenId);
         } else if (outcome == Outcome.DRAW) {
+            _rewardWithWords(s.player, 10_000);
             ILockableCharacter(collection).unlock(tokenId);
         } else {
             // LOSS: the character dies and serves its cooldown in the wallet
@@ -193,7 +204,7 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
      *         walking away from a losing story.
      */
     function abandon(address collection, uint256 tokenId) external nonReentrant {
-        bytes32 key = _key(collection, tokenId);
+        bytes32 key = getKey(collection, tokenId);
         Session memory s = sessions[key];
         if (s.player == address(0)) revert NoSession();
         if (s.player != msg.sender) revert NotCharacterOwner();
@@ -221,10 +232,20 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
         emit Withdrawn(msg.sender, amount);
     }
 
+    function _rewardWithWords(address receiver, uint256 rewardBps) internal {
+        if (address(wordsToken) == address(0) || wordsReward == 0) return;
+        uint256 amount = wordsReward * rewardBps / 10_000;
+        if (amount == 0) return;                         // e.g. bps == 0, nothing to mint
+        try wordsToken.mint(receiver, amount) {
+            emit WordsRewarded(receiver, amount);        // ✅ the real amount
+        } catch {
+            emit WordsRewardFailed(receiver, amount);
+        }
+    }
     // -------------------------------------------------------------- views
 
     function isPlayable(address collection, uint256 tokenId) external view returns (bool) {
-        bytes32 key = _key(collection, tokenId);
+        bytes32 key = getKey(collection, tokenId);
         return sessions[key].player == address(0)
             && !ILockableCharacter(collection).locked(tokenId);
     }
@@ -234,7 +255,7 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
         return address(this).balance > owed ? address(this).balance - owed : 0;
     }
 
-    function _key(address collection, uint256 tokenId) internal pure returns (bytes32) {
+    function getKey(address collection, uint256 tokenId) public pure returns (bytes32) {
         return keccak256(abi.encode(collection, tokenId));
     }
 }

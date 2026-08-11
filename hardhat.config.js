@@ -6,7 +6,8 @@ const MM_PNEMONIC = vars.get("MM_PNEMONIC");
 const PINATA_JWT = vars.get("PINATA_JWT");
 const PINATA_GW = vars.get("PINATA_GW");
 const IPFS_GW = vars.get("IPFS_GW");
-
+const GAME_SIGNER_ADDRESS = vars.get("GAME_SIGNER_ADDRESS");
+const GAME_SIGNER_KEY = vars.get("GAME_SIGNER_KEY");
 require('./deployments/tasks/deployImmutable.js');
 require('./deployments/tasks/setupIPFSCollection.js');
 require('./deployments/tasks/deploySoftToken.js');
@@ -48,6 +49,8 @@ task("show-keys", "Shows the MetaMask and Infura")
     console.log(`Pinata JWT: ${PINATA_JWT}`);
     console.log(`Pinata GW: ${PINATA_GW}`);
     console.log(`IPFS GW: ${IPFS_GW}`);
+    console.log(`GAME SIGNER ADDRESS: ${GAME_SIGNER_ADDRESS}`);
+    console.log(`GAME SIGNER KEY: ${GAME_SIGNER_KEY}`);
 })
 //npx hardhat balance --account 0xee6870759cbDdFb12EE3A4547C35FFB667717df4 --network sepolia
 task("balance", "Prints an account's balance")
