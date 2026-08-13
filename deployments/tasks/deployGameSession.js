@@ -109,7 +109,7 @@ task('setup-characters-collection', 'Sets the game contract as locker for the gi
 
     console.log('-- waiting for tx --');
 
-    await sleep(3000);
+    await sleep(6000);
 
     let allowedCollection = await gameSession.allowedCollections(collectionAddress);
 
@@ -119,18 +119,56 @@ task('setup-characters-collection', 'Sets the game contract as locker for the gi
 
     console.log('-- waiting for tx --');
     
-    await sleep(3000);
+    await sleep(6000);
 
     let locker = await collection.locker();
    
     console.log(`-- collection locker: ${locker} --`);
 });
 
-
+//npx hardhat --network setup-words-token --gamedeployment ImmutableRandomQuests-v0.0.1 --tokenaddress 0x8FCBFeA86D2e2B648E7B6a869367d28847702cCE --rewardpoints 1000000000000000
 task('setup-words-token', 'Sets the game contract stuff for the WORDS token rewarding')
 .addParam('gamedeployment') //ImmutableRandomQuests-v0.0.1-{network}.json, p.ej
 .addParam('tokenaddress')  //
 .addParam('rewardpoints') // en WEI
 .setAction(async (taskArgs, args) => {
+    let tokenAddress = taskArgs['tokenaddress'];
+    let wordsReward = taskArgs['rewardpoints'];
+    
+    const signers = await hre.ethers.getSigners();
+    const signer = signers[0];
+    
+    console.log('setting words token', tokenAddress);
+    
+    const deploymentsRoot = path.join(__dirname, '..');
 
+    const gameSessionData = require(path.resolve(deploymentsRoot, 'games', `GameSession-${taskArgs['gamedeployment']}-${args.network.name}.json`));
+
+    const gameSession = await new hre.ethers.Contract(gameSessionData.contractAddress, gameSessionData.contractABI, signer);
+
+    const tokenContract = await hre.ethers.getContractAt("SoftToken", tokenAddress);
+
+    let minterRole = await tokenContract.MINTER_ROLE();
+
+    console.log(`-- granting minter role: ${minterRole} --`);
+
+    await tokenContract.grantRole(minterRole, gameSessionData.contractAddress);
+
+    console.log('-- awaiting TX --');
+
+    await sleep(6000);
+
+    let grantedRole = await tokenContract.hasRole(minterRole, gameSessionData.contractAddress);
+
+    console.log(`-- granted role: ${grantedRole} --`);
+
+    await gameSession.setWordsConfig(tokenAddress, wordsReward);
+
+    console.log('-- awaiting TX --');
+
+    await sleep(6000);
+    
+    let address = await gameSession.wordsToken();
+
+    console.log('-- stored address --', address);
 });
