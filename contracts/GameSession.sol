@@ -118,7 +118,7 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
     /// The "" is the calldata — empty, meaning no function selector, which is what triggers the recipient's receive(). 
     /// By default it forwards all remaining gas.
     function sweep(address to, uint256 amount) external onlyOwner nonReentrant {
-        if (amount > _freeBalance()) revert Insolvent();
+        if (amount > freeBalance()) revert Insolvent();
         (bool ok, ) = to.call{value: amount}("");
         if (!ok) revert TransferFailed();
     }
@@ -250,7 +250,8 @@ contract GameSession is Ownable2Step, ReentrancyGuard {
             && !ILockableCharacter(collection).locked(tokenId);
     }
 
-    function _freeBalance() internal view returns (uint256) {
+    function freeBalance() public view returns (uint256) {
+        require(msg.sender == owner(), "Only Owner");
         uint256 owed = totalPending + reserved;
         return address(this).balance > owed ? address(this).balance - owed : 0;
     }
