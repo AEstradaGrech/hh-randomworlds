@@ -1,10 +1,10 @@
 {
 	"contractType": "ImmutableCollection",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"deployment": "RandomWorlds-Season_1",
 	"tokenName": "RandomWorldsHardHat",
 	"tokenSymbol": "RNDS1",
-	"network": "localhost",
+	"network": "sepolia",
 	"collectionName": "RandomWorlds - Season_1",
 	"collectionDescription": "A collection of NFT characters to play Random Quests in the Random Worlds app",
 	"isFreeCollection": false,
@@ -589,8 +589,8 @@
 			}
 		]
 	},
-	"factoryAddress": "0x5d109403AcabAe65AF518136284Cc5b08b5C69B8",
-	"contractAddress": "0x43d29f442B9783679a6d3DC225D2881a15f159Cf",
+	"factoryAddress": "0x2462e3Fa919c74ab6Efe8e1ad38568fF1fD97f75",
+	"contractAddress": "0x8f4Fb19c0B6679d9b0714C39c499aFF31C7782a7",
 	"contractOwner": "0xee6870759cbDdFb12EE3A4547C35FFB667717df4",
 	"abi": [
 		{
@@ -1983,36 +1983,9 @@
 			"type": "function"
 		}
 	],
-	"contractSummary": {
-		"tokenName": "RandomWorldsHardHat",
-		"symbol": "RNDS1",
-		"name": "RandomWorlds - Season_1",
-		"description": "A collection of NFT characters to play Random Quests in the Random Worlds app",
-		"imagesCid": "QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU",
-		"metadataCid": "QmWPWn9mDUWa23gVEvAPhchgJBeoBTXsf6achy7eT7pojF",
-		"endpoint": "https://ipfs.io/ipfs",
-		"logoEndpoint": "https://ipfs.io/ipfs/QmUhKuo2c32hrwgG6As3B7oWHLxM31a4T9ovpTwF8xiHaU/RandomWorlds-Season1_logo.png",
-		"isLimited": true,
-		"maxMints": 50,
-		"isOutOfStock": false,
-		"defaultWeiPrice": 300000000000000,
-		"models": [
-			"Kaelin_Blackjack_Vex_Common",
-			"Augustus_Augie_Eastwood",
-			"Kazimir_Koldun",
-			"Dark_Animist",
-			"Malicia_Folcott",
-			"Abigail_Williams"
-		]
-	},
 	"deploymentStatus": {
 		"settedModels": [
-			"Kaelin_Blackjack_Vex_Common",
-			"Augustus_Augie_Eastwood",
-			"Kazimir_Koldun",
-			"Dark_Animist",
-			"Malicia_Folcott",
-			"Abigail_Williams"
+
 		],
 		"ipfsDataSet": true,
 		"enabledTokens": [

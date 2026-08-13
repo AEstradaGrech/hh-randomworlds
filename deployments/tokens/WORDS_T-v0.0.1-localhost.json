@@ -1,1 +1,9 @@
-{"type":"soft","network":"localhost","name":"Words","symbol":"WORDS_T","version":"0.0.1","owner":"0xee6870759cbDdFb12EE3A4547C35FFB667717df4","address":"0xA59e88C0E877Cd0bf6b4aEc3b7B85690935107a7"}
+{
+	"type": "soft",
+	"network": "localhost",
+	"name": "Words",
+	"symbol": "WORDS_T",
+	"version": "0.0.1",
+	"owner": "0xee6870759cbDdFb12EE3A4547C35FFB667717df4",
+	"address": "0xA59e88C0E877Cd0bf6b4aEc3b7B85690935107a7"
+}

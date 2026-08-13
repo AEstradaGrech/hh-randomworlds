@@ -1,13 +1,13 @@
 {
 	"type": "GameSession",
-	"chain": "localhost",
+	"chain": "sepolia",
 	"deploymentName": "ImmutableRandomQuests",
 	"entryFee": "1000000000000000",
 	"winMultiplier": "1",
-	"recoveryCooldown": "1 mins. (60 seconds)",
-	"sessionTimeout": "1 mins. (60 seconds)",
+	"recoveryCooldown": "3 mins. (180 seconds)",
+	"sessionTimeout": "3 mins. (180 seconds)",
 	"version": "0.0.1",
-	"contractAddress": "0xA00620A2681e76731BcF0Fa7C10Ec13746C7ff72",
+	"contractAddress": "0x13Efbc9107859b6835D38D3ec0cfAD2A5246d49e",
 	"contractABI": [
 		{
 			"inputs": [

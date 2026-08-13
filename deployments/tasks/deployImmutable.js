@@ -345,6 +345,7 @@ if(!IPFS_GW ){
 
 })
 
+//npx hardhat --network sepolia set-deployment-models --deploymentname RandomWorlds-Season_1 --deploymentversion 0.1.1
 task('set-deployment-models', 'Sets the collection models data for a given deployment if they are not already set')
 .addParam('deploymentname') //split '-' --> RandomWorlds-Season1 <- col metadata en json
 .addParam('deploymentversion')
