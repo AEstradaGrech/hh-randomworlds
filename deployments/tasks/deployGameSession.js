@@ -68,7 +68,7 @@ task('deploy-game-session', 'Deploys a game session contract for the Quests Mode
 
     console.log('-- await TX --');
 
-    await sleep(3000);
+    await sleep(6000);
 
     let freeBalance = await deployed.freeBalance();
 
